@@ -1,0 +1,18 @@
+/* footer.css */
+.site-footer {
+  background: #192f6a;
+  color: white;
+  padding: 60px 0 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.copyright {
+  text-align: center;
+  opacity: 0.7;
+}

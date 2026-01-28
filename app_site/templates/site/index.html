@@ -1,0 +1,71 @@
+{% extends "site/base.html" %}
+
+{% block content %}
+
+  {% load static %}
+  <!-- Hero -->
+  {% include "site/components/hero.html" %}
+
+  <!-- Welcome / About -->
+  <section id="about" class="section about">
+    <div class="container">
+      <h2>Welcome to Oromsoy Resort</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Расположенный в сердце потрясающих гор, наш курорт предлагает идеальное сочетание роскоши, приключений и спокойствия.</p>
+          <p>Наслаждайтесь зимними видами спорта, уютными номерами и вкусной кухней в окружении нетронутой природы.</p>
+          <a href="#rooms" class="btn-primary">Посмотреть номера</a>
+        </div>
+        <div class="about-image">
+          <img src="{% static 'images/about-resort.jpg' %}" alt="Oromsoy Resort">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rooms -->
+  <section id="rooms" class="section rooms">
+    <div class="container">
+      <h2>Наши номера</h2>
+      <div class="rooms-grid">
+        <!-- Пример одной карточки — повтори 3–4 раза -->
+        <div class="room-card">
+          <img src="{% static 'images/rooms/standard.jpg' %}" alt="Standard Room">
+          <h3>Standard Room</h3>
+          <p>Уютный номер с видом на горы, двуспальная кровать, Wi-Fi</p>
+          <span class="price">от 120 $ / ночь</span>
+          <a href="#" class="btn-primary">Подробнее</a>
+        </div>
+        <!-- ... другие карточки -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Activities -->
+  <section id="activities" class="section activities">
+    <div class="container">
+      <h2>Активный отдых</h2>
+      <div class="activities-grid">
+        <div class="activity-card">
+          <img src="{% static 'images/activities/ski.jpg' %}" alt="Skiing">
+          <h3>Горные лыжи</h3>
+          <p>Трассы всех уровней сложности в 5 минутах от отеля</p>
+        </div>
+        <!-- ... другие активности -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Restaurant (пока простой) -->
+  <section id="restaurant" class="section restaurant">
+    <div class="container">
+      <h2>Ресторан</h2>
+      <p>Наслаждайтесь блюдами национальной и европейской кухни с панорамным видом на горы.</p>
+      <img src="{% static 'images/restaurant/main.jpg' %}" alt="Restaurant" class="full-width">
+    </div>
+  </section>
+
+  <!-- Footer -->
+  {% include "site/components/footer.html" %}
+
+{% endblock %}
