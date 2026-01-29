@@ -1,10 +1,32 @@
-header.html<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<{% load static %}
+<section id="rooms" class="section rooms">
+    <div class="container">
+      <h2>Rooms & Suites</h2>
+      <p class="section-lead">
+        Просторные номера с тёплым интерьером, натуральными материалами и панорамными видами на горы.
+      </p>
+      <div class="rooms-grid">
+        <div class="room-card">
+          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
+          <h3>Standard Room</h3>
+          <p>Уютный номер с видом на горы, двуспальная кровать, Wi‑Fi.</p>
+          <span class="price">от 120 $ / ночь</span>
+          <a href="#" class="btn-primary">Подробнее</a>
+        </div>
+         <div class="room-card">
+          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
+          <h3>Family Suite</h3>
+          <p>Две спальни, гостиная, панорамные окна, отдельная терраса.</p>
+          <span class="price">от 220 $ / ночь</span>
+          <a href="#" class="btn-primary">Подробнее</a>
+        </div>
+        <div class="room-card">
+          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
+          <h3>Chalet Deluxe</h3>
+          <p>Приватное шале с камином, джакузи и видом на ущелье.</p>
+          <span class="price">от 420 $ / ночь</span>
+          <a href="#" class="btn-primary">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  </section>

@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<{% load static %}
+<!-- Activities -->
+  <section id="activities" class="section activities">
+    <div class="container">
+      <h2>Активный отдых</h2>
+      <p class="section-lead">
+        Свежий воздух, снег и лучшие активности региона — всё рядом с вашим номером.
+      </p>
+      <div class="activities-grid">
+        <div class="activity-card">
+          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
+          <h3>Горные лыжи</h3>
+          <p>Трассы всех уровней сложности в 5 минутах от отеля.</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
+          <h3>Снегоходы</h3>
+          <p>Сафари по заснеженным маршрутам с профессиональными гидами.</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %})";"></div>
+          <h3>Спа и релакс</h3>
+          <p>Сауна, массаж и панорамный релакс‑зал после активного дня.</p>
+        </div>
+        </div>
+    </div>
+  </section>

@@ -7,147 +7,15 @@
   {% include "site/components/hero.html" %}
 
   <!-- Welcome / About -->
-  <section id="about" class="section about">
-    <div class="container">
-      <h2>Welcome to Oromsoy Resort</h2>
-      <p class="section-lead">
-        Мы находимся в самом сердце Чимгана и создаем атмосферу, где горные виды, уют и премиальный сервис
-        встречаются в одном месте.
-      </p>
-      <div class="about-grid">
-        <div class="about-text">
-          <p>
-            Oromsoy Resort — это современный горный отель, который идеально подходит для семейного отдыха,
-            романтических выходных и активного туризма. Нас ждут заснеженные вершины, сафари на снегоходах,
-            теплые вечера у камина и кухня, которой хочется наслаждаться снова и снова.
-          </p>
-          <p>
-            Мы продумали каждую деталь: от панорамных окон в номерах до частных террас и спа-зон с видом на ущелье.
-          </p>
-          <a href="#rooms" class="btn-primary">Посмотреть номера</a>
-        </div>
-        <div class="about-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-      </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <h3>1 200 м</h3>
-          <p>над уровнем моря</p>
-        </div>
-        <div class="stat-card">
-          <h3>36</h3>
-          <p>номеров и шале</p>
-        </div>
-        <div class="stat-card">
-          <h3>5★</h3>
-          <p>уровень сервиса</p>
-        </div>
-      </div>
-    </div>
-  </section>
-<!-- Rooms -->
-  <section id="rooms" class="section rooms">
-    <div class="container">
-      <h2>Rooms & Suites</h2>
-      <p class="section-lead">
-        Просторные номера с тёплым интерьером, натуральными материалами и панорамными видами на горы.
-      </p>
-      <div class="rooms-grid">
-        <div class="room-card">
-          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Standard Room</h3>
-          <p>Уютный номер с видом на горы, двуспальная кровать, Wi‑Fi.</p>
-          <span class="price">от 120 $ / ночь</span>
-          <a href="#" class="btn-primary">Подробнее</a>
-        </div>
-         <div class="room-card">
-          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Family Suite</h3>
-          <p>Две спальни, гостиная, панорамные окна, отдельная терраса.</p>
-          <span class="price">от 220 $ / ночь</span>
-          <a href="#" class="btn-primary">Подробнее</a>
-        </div>
-        <div class="room-card">
-          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Chalet Deluxe</h3>
-          <p>Приватное шале с камином, джакузи и видом на ущелье.</p>
-          <span class="price">от 420 $ / ночь</span>
-          <a href="#" class="btn-primary">Подробнее</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<!-- Activities -->
-  <section id="activities" class="section activities">
-    <div class="container">
-      <h2>Активный отдых</h2>
-      <p class="section-lead">
-        Свежий воздух, снег и лучшие активности региона — всё рядом с вашим номером.
-      </p>
-      <div class="activities-grid">
-        <div class="activity-card">
-          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Горные лыжи</h3>
-          <p>Трассы всех уровней сложности в 5 минутах от отеля.</p>
-        </div>
-        <div class="activity-card">
-          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Снегоходы</h3>
-          <p>Сафари по заснеженным маршрутам с профессиональными гидами.</p>
-        </div>
-        <div class="activity-card">
-          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %})";"></div>
-          <h3>Спа и релакс</h3>
-          <p>Сауна, массаж и панорамный релакс‑зал после активного дня.</p>
-        </div>
-        </div>
-    </div>
-  </section>
-
-<!-- Dining bar -->
-  <section id="dining" class="section dining">
-    <div class="container">
-      <h2>Dining Bar</h2>
-      <div class="dining-grid">
-        <div class="dining-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-        <div class="dining-text">
-          <p>
-            Начните день с ароматного завтрака, завершите вечер ужином у камина. В меню — локальные продукты,
-            европейская классика и авторские блюда шеф‑повара.
-          </p>
-          <ul class="dining-list">
-            <li>Завтраки с 07:00 до 11:00</li>
-            <li>Авторское меню и винная карта</li>
-            <li>Панорамная терраса</li>
-          </ul>
-          <a href="#contacts" class="btn-secondary">Забронировать стол</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
+  {% include "site/components/about.html" %}
+  <!-- Rooms -->
+  {% include "site/components/rooms.html" %}
+  <!-- Activities -->
+  {% include "site/components/activities.html" %}
+  <!-- Dining bar -->
+  {% include "site/components/restaurant.html" %}
   <!-- Contacts -->
-  <section id="contacts" class="section contacts">
-    <div class="container">
-      <h2>Contacts</h2>
-      <p class="section-lead">Мы всегда на связи и готовы подобрать идеальный вариант отдыха.</p>
-      <div class="contacts-grid">
-        <div class="contact-card">
-          <h3>Адрес</h3>
-          <p>Узбекистан, Ташкентская область, Чимган</p>
-        </div>
-        <div class="contact-card">
-          <h3>Телефон</h3>
-          <p>+998 (90) 123‑45‑67</p>
-        </div>
-        <div class="contact-card">
-          <h3>Почта</h3>
-          <p>hello@oromsoyresort.uz</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
+  {% include "site/components/contacts.html" %}
   <!-- Footer -->
   {% include "site/components/footer.html" %}
 

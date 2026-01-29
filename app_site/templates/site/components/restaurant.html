@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<{% load static %}
+<section id="dining" class="section dining">
+    <div class="container">
+      <h2>Dining Bar</h2>
+      <div class="dining-grid">
+        <div class="dining-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
+        <div class="dining-text">
+          <p>
+            Начните день с ароматного завтрака, завершите вечер ужином у камина. В меню — локальные продукты,
+            европейская классика и авторские блюда шеф‑повара.
+          </p>
+          <ul class="dining-list">
+            <li>Завтраки с 07:00 до 11:00</li>
+            <li>Авторское меню и винная карта</li>
+            <li>Панорамная терраса</li>
+          </ul>
+          <a href="#contacts" class="btn-secondary">Забронировать стол</a>
+        </div>
+      </div>
+    </div>
+  </section>
