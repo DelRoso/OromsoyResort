@@ -1,13 +1,15 @@
 /* Hero */
+/* Hero — фон и размеры блока */
 .hero {
   position: relative;
-  min-height: 86vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   color: #fff;
   background: url("../images/background/test1.jpg") center/cover no-repeat;
 }
 
+/* Hero — затемнение поверх фонового изображения */
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -19,6 +21,7 @@
   );
 }
 
+/* Hero — контент поверх фона */
 .hero-content {
   position: relative;
   z-index: 1;
@@ -26,6 +29,7 @@
   max-width: 900px;
 }
 
+/* Hero — контент поверх фона */
 .hero-eyebrow {
   text-transform: uppercase;
   letter-spacing: 4px;
@@ -34,6 +38,7 @@
   opacity: 0.8;
 }
 
+/* Hero — главный заголовок */
 .hero-content h1 {
   font-size: clamp(36px, 6vw, 64px);
   text-transform: uppercase;
@@ -41,10 +46,12 @@
   color: #fff;
 }
 
+/* Hero — акцентное слово */
 .hero-content h1 em {
   font-style: italic;
 }
 
+/* Hero — декоративная линия */
 .hero-divider {
   width: 70px;
   height: 2px;
@@ -52,12 +59,14 @@
   margin: 20px auto;
 }
 
+/* Hero — подзаголовок */
 .hero-subtitle {
   font-size: 18px;
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 30px;
 }
 
+/* Hero — блок кнопок */
 .hero-buttons {
   display: flex;
   justify-content: center;
@@ -65,7 +74,8 @@
   flex-wrap: wrap;
 }
 
-/* Header */
+/* Header — шапка сайта */
+/* Header — контейнер шапки */
 .site-header {
   position: absolute;
   top: 0;
@@ -76,6 +86,7 @@
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Header — внутреннее выравнивание */
 .header-inner {
   display: flex;
   align-items: center;
@@ -84,6 +95,7 @@
   padding: 0 40px;
 }
 
+/* Header — вид при прокрутке */
 .site-header.scrolled {
   position: fixed;
   background: rgba(7, 19, 46, 0.9);
@@ -91,6 +103,7 @@
   box-shadow: 0 12px 30px rgba(7, 19, 46, 0.35);
 }
 
+/* Header — логотип */
 .logo {
   display: flex;
   align-items: center;
@@ -101,15 +114,18 @@
   letter-spacing: 2px;
 }
 
+/* Header — иконка логотипа */
 .logo img {
-  width: 28px;
+  width: 75px;
 }
 
+/* Header — навигация */
 .main-nav {
   display: flex;
   gap: 32px;
 }
 
+/* Header — ссылки меню */
 .main-nav a {
   color: #fff;
   text-decoration: none;
@@ -119,30 +135,35 @@
   transition: color 0.3s;
 }
 
+/* Header — ссылки меню при наведении */
 .main-nav a:hover {
   color: #ffd700;
 }
 
+/* Header — блок иконок соцсетей */
 .social {
   display: flex;
   gap: 16px;
 }
 
+/* Header — иконки соцсетей */
 .social img {
   width: 18px;
   opacity: 0.8;
   transition: opacity 0.3s;
 }
 
+/* Header — иконки соцсетей при наведении */
 .social img:hover {
   opacity: 1;
 }
+/* Адаптив: уменьшение расстояния в меню */
 @media (max-width: 1024px) {
   .main-nav {
-    gap: 18px;
+    gap: 1px;
   }
 }
-
+/* Адаптив: перенос элементов в колонку */
 @media (max-width: 880px) {
   .header-inner {
     flex-direction: column;
