@@ -1,9 +1,14 @@
 /* footer.css */
 .site-footer {
-   background: #0c1b3a;
+  background: #0c1b3a;
   color: white;
   padding: 70px 0 30px;
-}.footer-content {
+}
+.site-footer a{
+  color: inherit;
+}
+
+.footer-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
