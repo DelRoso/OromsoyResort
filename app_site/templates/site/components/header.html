@@ -1,15 +1,15 @@
 {% load static %}
-<header class="site-header">
+<header class="site-header" id="siteHeader">
   <div class="container header-inner">
 
     <!-- LOGO -->
-    <div class="logo">
+    <a class="logo" href="#top" aria-label="Oromsoy Resort">
       <img src="{% static 'images/icons/logo.png' %}" alt="Oromsoy Resort">
       <span>Oromsoy Resort</span>
-    </div>
+    </a>
 
-    <!-- NAVIGATION -->
-    <nav class="main-nav">
+    <!-- DESKTOP NAV -->
+    <nav class="main-nav" aria-label="Main navigation">
       <a href="#about">About Us</a>
       <a href="#rooms">Rooms & Suites</a>
       <a href="#activities">Activities</a>
@@ -17,13 +17,46 @@
       <a href="#contacts">Contacts</a>
     </nav>
 
-    <!-- SOCIAL ICONS -->
-    <div class="social">
-      <a href="#"><img src="{% static 'images/icons/facebook.png' %}" alt="FB"></a>
-      <a href="#"><img src="{% static 'images/icons/instagram.png' %}" alt="IG"></a>
-      <a href="#"><img src="{% static 'images/icons/youtube.png' %}" alt="YT"></a>
+    <!-- DESKTOP SOCIAL -->
+    <div class="social" aria-label="Social links">
+      <a href="#"><img src="{% static 'images/icons/facebook.png' %}" alt="Facebook"></a>
+      <a href="#"><img src="{% static 'images/icons/instagram.png' %}" alt="Instagram"></a>
+      <a href="#"><img src="{% static 'images/icons/youtube.png' %}" alt="YouTube"></a>
       <a href="#"><img src="{% static 'images/icons/x.png' %}" alt="X"></a>
-      <a href="#"><img src="{% static 'images/icons/telegram.png' %}" alt="TG"></a>
+      <a href="#"><img src="{% static 'images/icons/telegram.png' %}" alt="Telegram"></a>
+    </div>
+
+    <!-- BURGER (mobile/tablet) -->
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+
+  <!-- MOBILE OVERLAY (скрыт на десктопе полностью) -->
+  <div class="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu-top">
+      <a class="logo" href="#top" aria-label="Oromsoy Resort">
+        <img src="{% static 'images/icons/logo.png' %}" alt="Oromsoy Resort">
+        <span>Oromsoy Resort</span>
+      </a>
+
+      <button class="menu-close" type="button" aria-label="Close menu">✕</button>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <a href="#about">ABOUT US</a>
+      <a href="#rooms">ROOMS & SUITES</a>
+      <a href="#activities">ACTIVITIES</a>
+      <a href="#dining">DINNING BAR</a>
+      <a href="#contacts">CONTACTS</a>
+    </nav>
+
+    <div class="mobile-social" aria-label="Mobile social links">
+      <a href="#"><img src="{% static 'images/icons/facebook.png' %}" alt="Facebook"></a>
+      <a href="#"><img src="{% static 'images/icons/instagram.png' %}" alt="Instagram"></a>
+      <a href="#"><img src="{% static 'images/icons/youtube.png' %}" alt="YouTube"></a>
+      <a href="#"><img src="{% static 'images/icons/x.png' %}" alt="X"></a>
+      <a href="#"><img src="{% static 'images/icons/telegram.png' %}" alt="Telegram"></a>
     </div>
   </div>
 </header>

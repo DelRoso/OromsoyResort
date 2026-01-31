@@ -1,4 +1,7 @@
-/* Hero */
+/* =========================
+   HERO
+========================= */
+
 /* Hero — фон и размеры блока */
 .hero {
   position: relative;
@@ -6,7 +9,7 @@
   display: flex;
   align-items: center;
   color: #fff;
-  background: url("../images/background/test1.jpg") center/cover no-repeat;
+  background: url("../images/background/test1.jpg") center / cover no-repeat;
 }
 
 /* Hero — затемнение поверх фонового изображения */
@@ -29,7 +32,7 @@
   max-width: 900px;
 }
 
-/* Hero — контент поверх фона */
+/* Hero — eyebrow */
 .hero-eyebrow {
   text-transform: uppercase;
   letter-spacing: 4px;
@@ -38,7 +41,7 @@
   opacity: 0.8;
 }
 
-/* Hero — главный заголовок */
+/* Hero — заголовок */
 .hero-content h1 {
   font-size: clamp(36px, 6vw, 64px);
   text-transform: uppercase;
@@ -46,7 +49,7 @@
   color: #fff;
 }
 
-/* Hero — акцентное слово */
+/* Hero — акцент */
 .hero-content h1 em {
   font-style: italic;
 }
@@ -66,7 +69,7 @@
   margin-bottom: 30px;
 }
 
-/* Hero — блок кнопок */
+/* Hero — кнопки */
 .hero-buttons {
   display: flex;
   justify-content: center;
@@ -74,28 +77,32 @@
   flex-wrap: wrap;
 }
 
-/* Header — шапка сайта */
-/* Header — контейнер шапки */
+/* =========================
+   HEADER
+========================= */
+
+/* Header — контейнер */
 .site-header {
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 200;
   color: #fff;
   font-family: 'Montserrat', sans-serif;
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Header — внутреннее выравнивание */
+/* Header — внутренний контейнер */
 .header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 80px;
   padding: 0 40px;
+  gap: 24px;
 }
 
-/* Header — вид при прокрутке */
+/* Header — при скролле */
 .site-header.scrolled {
   position: fixed;
   background: rgba(7, 19, 46, 0.9);
@@ -103,7 +110,7 @@
   box-shadow: 0 12px 30px rgba(7, 19, 46, 0.35);
 }
 
-/* Header — логотип */
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
@@ -112,68 +119,188 @@
   font-size: 18px;
   text-transform: uppercase;
   letter-spacing: 2px;
+  white-space: nowrap;
 }
 
-/* Header — иконка логотипа */
 .logo img {
   width: 75px;
 }
 
-/* Header — навигация */
+/* =========================
+   DESKTOP NAV
+========================= */
+
+/* Навигация */
 .main-nav {
   display: flex;
-  gap: 32px;
+  align-items: center;
+  flex-wrap: nowrap;              /* ⛔ запрет переноса */
+  white-space: nowrap;            /* ⛔ текст не переносится */
+  gap: clamp(12px, 2vw, 32px);    /* плавное сужение */
 }
 
-/* Header — ссылки меню */
+/* Ссылки меню */
 .main-nav a {
   color: #fff;
   text-decoration: none;
-  font-size: 12px;
+  font-size: clamp(11px, 1vw, 12px);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: color 0.3s;
+  letter-spacing: clamp(0.6px, 0.8vw, 1px);
+  transition: color 0.25s ease;
+  white-space: nowrap;
 }
 
-/* Header — ссылки меню при наведении */
 .main-nav a:hover {
   color: #ffd700;
 }
 
-/* Header — блок иконок соцсетей */
+/* =========================
+   SOCIAL
+========================= */
+
 .social {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 14px;
 }
 
-/* Header — иконки соцсетей */
 .social img {
   width: 18px;
   opacity: 0.8;
-  transition: opacity 0.3s;
+  transition: opacity 0.25s ease;
 }
 
-/* Header — иконки соцсетей при наведении */
 .social img:hover {
   opacity: 1;
 }
-/* Адаптив: уменьшение расстояния в меню */
-@media (max-width: 1200px) {
-  .main-nav {
-    gap: 1px;
-  }
+
+/* =========================
+   BURGER
+========================= */
+
+.menu-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
 }
-/* Адаптив: перенос элементов в колонку */
-@media (max-width: 880px) {
-  .header-inner {
-    flex-direction: column;
-    height: auto;
-    gap: 12px;
-    padding: 20px;
+
+.menu-toggle::before,
+.menu-toggle::after,
+.menu-toggle span {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.menu-toggle::before { top: 14px; }
+.menu-toggle span { top: 50%; transform: translateY(-50%); }
+.menu-toggle::after { bottom: 14px; }
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+/* По умолчанию mobile-menu НЕ существует */
+.mobile-menu {
+  display: none;
+}
+
+/* Открытое меню */
+.site-header.menu-open .mobile-menu {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: #132a79;
+  z-index: 9999;
+  padding: 22px 18px 32px;
+}
+
+/* Верх оверлея */
+.mobile-menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-close {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Навигация в колонку */
+.mobile-nav {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+
+.mobile-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+/* Соц-сети */
+.mobile-social {
+  margin-top: 34px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.mobile-social img {
+  width: 18px;
+  opacity: 0.95;
+}
+
+/* Блокируем скролл */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* =========================
+   BREAKPOINTS
+========================= */
+
+/* Планшет и ниже */
+@media (max-width: 1100px) {
+  .main-nav,
+  .social {
+    display: none;
   }
 
-  .main-nav {
-    flex-wrap: wrap;
-    justify-content: center;
+  .menu-toggle {
+    display: inline-block;
+  }
+
+  .header-inner {
+    height: 72px;
+    padding: 0 18px;
+  }
+
+  .logo img {
+    width: 62px;
+  }
+
+  .logo {
+    font-size: 15px;
   }
 }
