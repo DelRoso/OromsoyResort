@@ -158,7 +158,7 @@
   opacity: 1;
 }
 /* Адаптив: уменьшение расстояния в меню */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .main-nav {
     gap: 1px;
   }
