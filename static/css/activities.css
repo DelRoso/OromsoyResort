@@ -1,0 +1,32 @@
+/* Activities — сетка активностей */
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+/* Activities — карточка активности */
+.activity-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(7, 19, 46, 0.1);
+}
+
+/* Activities — изображение активности */
+.activity-image {
+  height: 220px;
+  background: center/cover no-repeat;
+}
+
+/* Activities — заголовок карточки */
+.activity-card h3 {
+  padding: 18px 20px 8px;
+}
+
+/* Activities — описание */
+.activity-card p {
+  padding: 0 20px 20px;
+  color: #5b6b8a;
+  margin: 0;
+}

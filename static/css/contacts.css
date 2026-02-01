@@ -1,0 +1,26 @@
+/* Contacts — сетка карточек контактов */
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+/* Contacts — карточка контакта */
+.contact-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(7, 19, 46, 0.08);
+}
+
+/* Contacts — заголовок карточки */
+.contact-card h3 {
+  margin-bottom: 8px;
+}
+
+/* Contacts — текст карточки */
+.contact-card p {
+  margin: 0;
+  color: #5b6b8a;
+}

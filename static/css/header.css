@@ -77,6 +77,12 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 768px) {
+  .hero-buttons {
+    flex-direction: column;
+  }
+}
+
 /* =========================
    HEADER
 ========================= */

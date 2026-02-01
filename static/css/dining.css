@@ -1,0 +1,44 @@
+/* Dining — сетка ресторана */
+.dining-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  align-items: center;
+}
+
+/* Dining — изображение зала/еды */
+.dining-image {
+  min-height: 360px;
+  border-radius: 16px;
+  background: center/cover no-repeat;
+  box-shadow: 0 16px 32px rgba(7, 19, 46, 0.18);
+}
+
+/* Dining — текст описания */
+.dining-text p {
+  line-height: 1.7;
+  color: #5b6b8a;
+}
+
+/* Dining — список особенностей */
+.dining-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 30px;
+  color: #15264b;
+}
+
+/* Dining — элемент списка */
+.dining-list li {
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+/* Dining — маркер списка */
+.dining-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #1c3c92;
+}
