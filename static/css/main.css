@@ -541,3 +541,276 @@ h2 {
   }
   .room-frame img{ height: 280px; }
 }
+/* =========================
+   Rooms: clickable cards + modal
+========================= */
+
+/* hover + кликабельность */
+.room-slide{
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+
+.room-frame{
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+
+.room-slide:hover .room-frame{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 42px rgba(7, 19, 46, .12);
+}
+
+.room-slide:active .room-frame{
+  transform: translateY(0px);
+}
+
+/* =========================
+   Rooms: modal redesign + fullscreen
+========================= */
+
+.room-modal{ display:none; }
+.room-modal.is-open{
+  display:block;
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+}
+
+.room-modal__backdrop{
+  position:absolute;
+  inset:0;
+  background: rgba(7, 19, 46, .65);
+  backdrop-filter: blur(6px);
+}
+
+.room-modal__panel{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(980px, calc(100% - 28px));
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(7, 19, 46, .35);
+  overflow: hidden;
+}
+
+.room-modal__close{
+  position:absolute;
+  right: 10px;
+  top: 8px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 26px;
+  color: #3b4a68;
+  z-index: 5;
+}
+
+.room-modal__top{
+  padding: 16px 18px 10px;
+}
+
+.room-modal__title{
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 16px;
+  color:#1c3c92;
+}
+
+/* slider area */
+.room-modal__slider{
+  position: relative;
+  padding: 0 54px;
+}
+
+.room-modal__track{
+  display:flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 0 0 10px;
+}
+.room-modal__track::-webkit-scrollbar{ display:none; }
+
+.room-modal__img{
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  border-radius: 10px;
+  overflow:hidden;
+  background:#eef2fa;
+}
+
+.room-modal__img img{
+  width: 100%;
+  height: min(56vh, 520px);
+  display:block;
+  object-fit: cover;
+  cursor: zoom-in; /* подсказка, что можно открыть full */
+}
+
+/* arrows: чистые, без кружков */
+.room-modal__arrow{
+  position:absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 46px;
+  line-height: 1;
+  color: rgba(59, 74, 104, .55);
+  transition: color .2s ease, transform .2s ease;
+  z-index: 3;
+}
+.room-modal__arrow:hover{
+  color:#1c3c92;
+  transform: translateY(-50%) translateY(-1px);
+}
+.room-modal__arrow--left{ left: 10px; }
+.room-modal__arrow--right{ right: 10px; }
+
+/* bottom row: цена по центру */
+.room-modal__bottom{
+  padding: 12px 18px 18px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-modal__priceBottom{
+  font-weight: 900;
+  color:#1c3c92;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.room-modal__dots{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content:center;
+}
+
+.room-modal__dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(28, 60, 146, .25);
+  cursor:pointer;
+  border:0;
+}
+.room-modal__dot.is-active{ background: rgba(28, 60, 146, 1); }
+
+body.modal-open{ overflow: hidden; }
+
+/* =========================
+   Fullscreen overlay
+========================= */
+
+.room-fs{
+  display:none;
+  touch-action: pan-y;
+}
+.room-fs.is-open{
+  display:block;
+  position: fixed;
+  inset: 0;
+  z-index: 30000;
+}
+
+.room-fs__backdrop{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,.92);
+  z-index: 0;
+}
+
+.room-fs__img{
+  position:absolute;
+  inset: 0;
+  margin:auto;
+  max-width: 96vw;
+  max-height: 92vh;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.room-fs__close{
+  position:absolute;
+  top: 14px;
+  right: 14px;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: rgba(0,0,0,.35);
+  color:#fff;
+  font-size: 30px;
+  cursor:pointer;
+  z-index: 3;              /* ВАЖНО: выше картинки */
+  border-radius: 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events: auto;    /* на всякий */
+}
+.room-fs__arrow{
+  position:absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: none;
+  color: rgba(255,255,255,.75);
+  font-size: 54px;
+  cursor:pointer;
+  z-index: 3;
+  transition: color .2s ease, transform .2s ease;
+  user-select: none;
+}
+.room-fs__arrow:hover{
+  color:#fff;
+  transform: translateY(-50%) translateY(-1px);
+}
+.room-fs__arrow--left{ left: 14px; }
+.room-fs__arrow--right{ right: 14px; }
+
+@media (max-width: 640px){
+  .room-fs__arrow{ font-size: 44px; }
+}
+/* =========================
+   Hide header when rooms modal is open
+========================= */
+
+body.modal-open .site-header{
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 1024px){
+  .room-modal__panel{ width: min(820px, calc(100% - 22px)); }
+  .room-modal__slider{ padding: 0 46px; }
+  .room-modal__arrow{ font-size: 44px; }
+  .room-modal__img img{ height: min(54vh, 460px); }
+}
+
+@media (max-width: 640px){
+  .room-modal__panel{ border-radius: 10px; }
+  .room-modal__top{ padding: 14px 14px 8px; }
+  .room-modal__slider{ padding: 0 36px; }
+  .room-modal__arrow{ font-size: 40px; }
+  .room-modal__img img{ height: min(46vh, 360px); }
+}

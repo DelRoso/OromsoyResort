@@ -16,9 +16,13 @@
 
       <div class="rooms-track" data-rooms-track>
         <!-- card 1 -->
-        <article class="room-slide">
+        <article class="room-slide"
+                 data-room-title="Amirsoy"
+                 data-room-price="$200.0 / NIGHT"
+                 data-images="/static/images/rooms/test.n1.jpg,/static/images/rooms/amirsoy2.jpg,/static/images/rooms/amirsoy3.jpg,
+                 /static/images/rooms/amirsoy4.jpg,/static/images/rooms/amirsoy5.jpg,/static/images/rooms/amirsoy6.jpg,/static/images/rooms/amirsoy7.jpg">
           <div class="room-frame">
-            <img src="{% static 'images/rooms/room-1.jpg' %}" alt="Amirsoy">
+            <img src="{% static 'images/rooms/amirsoy1.jpg' %}" alt="Amirsoy">
           </div>
 
           <h3 class="room-name">Amirsoy</h3>
@@ -36,9 +40,13 @@
         </article>
 
         <!-- card 2 -->
-        <article class="room-slide">
+        <article class="room-slide"
+                 data-room-title="Chimgan"
+                 data-room-price="$250.0 / NIGHT"
+                 data-images="/static/images/rooms/amirsoy1.jpg,/static/images/rooms/amirsoy2.jpg,/static/images/rooms/amirsoy3.jpg,
+                 /static/images/rooms/amirsoy4.jpg,/static/images/rooms/amirsoy5.jpg,/static/images/rooms/amirsoy6.jpg,/static/images/rooms/amirsoy7.jpg">
           <div class="room-frame">
-            <img src="{% static 'images/rooms/room-2.jpg' %}" alt="Chimgan">
+            <img src="{% static 'images/rooms/test.n1.jpg' %}" alt="Chimgan">
           </div>
 
           <h3 class="room-name">Chimgan</h3>
@@ -56,9 +64,13 @@
         </article>
 
         <!-- card 3 -->
-        <article class="room-slide">
+        <article class="room-slide"
+                 data-room-title="Bildersoy"
+                 data-room-price="$350.0 / NIGHT"
+                 data-images="/static/images/rooms/amirsoy1.jpg,/static/images/rooms/amirsoy2.jpg,/static/images/rooms/amirsoy3.jpg,
+                 /static/images/rooms/amirsoy4.jpg,/static/images/rooms/amirsoy5.jpg,/static/images/rooms/amirsoy6.jpg,/static/images/rooms/amirsoy7.jpg">
           <div class="room-frame">
-            <img src="{% static 'images/rooms/room-3.jpg' %}" alt="Bildersoy">
+            <img src="{% static 'images/rooms/test.n1.jpg' %}" alt="Bildersoy">
           </div>
 
           <h3 class="room-name">Bildersoy</h3>
@@ -79,5 +91,39 @@
       <button class="rooms-arrow rooms-arrow--right" type="button" aria-label="Next" data-rooms-next>›</button>
     </div>
 
+    <!-- ROOMS MODAL -->
+    <div class="room-modal" data-room-modal aria-hidden="true">
+      <div class="room-modal__backdrop" data-room-modal-close></div>
+
+      <div class="room-modal__panel" role="dialog" aria-modal="true" aria-label="Room gallery">
+        <button class="room-modal__close" type="button" aria-label="Close" data-room-modal-close>✕</button>
+
+        <div class="room-modal__top">
+          <div class="room-modal__title" data-room-modal-title>ROOM</div>
+        </div>
+
+        <div class="room-modal__slider" data-room-modal-slider>
+          <button class="room-modal__arrow room-modal__arrow--left" type="button" aria-label="Previous" data-room-modal-prev>‹</button>
+
+          <div class="room-modal__track" data-room-modal-track></div>
+
+          <button class="room-modal__arrow room-modal__arrow--right" type="button" aria-label="Next" data-room-modal-next>›</button>
+        </div>
+
+        <div class="room-modal__bottom">
+          <div class="room-modal__priceBottom" data-room-modal-price></div>
+          <div class="room-modal__dots" data-room-modal-dots></div>
+        </div>
+      </div>
+
+      <!-- FULLSCREEN OVERLAY (dark) -->
+      <div class="room-fs" data-room-fs aria-hidden="true">
+        <div class="room-fs__backdrop" data-room-fs-close></div>
+        <button class="room-fs__close" type="button" aria-label="Close" data-room-fs-close>✕</button>
+        <button class="room-fs__arrow room-fs__arrow--left" type="button" aria-label="Previous" data-room-fs-prev>‹</button>
+        <img class="room-fs__img" data-room-fs-img alt="Room photo">
+        <button class="room-fs__arrow room-fs__arrow--right" type="button" aria-label="Next" data-room-fs-next>›</button>
+      </div>
+    </div>
   </div>
 </section>
