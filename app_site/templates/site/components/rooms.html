@@ -1,32 +1,83 @@
 {% load static %}
 <section id="rooms" class="section rooms">
-    <div class="container">
-      <h2>Rooms & Suites</h2>
-      <p class="section-lead">
-        Просторные номера с тёплым интерьером, натуральными материалами и панорамными видами на горы.
-      </p>
-      <div class="rooms-grid">
-        <div class="room-card">
-          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Standard Room</h3>
-          <p>Уютный номер с видом на горы, двуспальная кровать, Wi‑Fi.</p>
-          <span class="price">от 120 $ / ночь</span>
-          <a href="#" class="btn-primary">Подробнее</a>
-        </div>
-         <div class="room-card">
-          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Family Suite</h3>
-          <p>Две спальни, гостиная, панорамные окна, отдельная терраса.</p>
-          <span class="price">от 220 $ / ночь</span>
-          <a href="#" class="btn-primary">Подробнее</a>
-        </div>
-        <div class="room-card">
-          <div class="room-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Chalet Deluxe</h3>
-          <p>Приватное шале с камином, джакузи и видом на ущелье.</p>
-          <span class="price">от 420 $ / ночь</span>
-          <a href="#" class="btn-primary">Подробнее</a>
-        </div>
+  <div class="container">
+
+    <div class="rooms-head">
+      <div class="rooms-title">
+        <span class="rooms-line"></span>
+        <h2>PICK A <span>ROOM</span> THAT BEST SUITS<br>YOUR TASTE AND BUDGET</h2>
       </div>
+
+      <a href="#contacts" class="btn-ghost">BOOK NOW</a>
     </div>
-  </section>
+
+    <div class="rooms-slider" data-rooms-slider>
+      <button class="rooms-arrow rooms-arrow--left" type="button" aria-label="Previous" data-rooms-prev>‹</button>
+
+      <div class="rooms-track" data-rooms-track>
+        <!-- card 1 -->
+        <article class="room-slide">
+          <div class="room-frame">
+            <img src="{% static 'images/rooms/room-1.jpg' %}" alt="Amirsoy">
+          </div>
+
+          <h3 class="room-name">Amirsoy</h3>
+          <div class="room-price">$200.0 <span>/ NIGHT</span></div>
+
+          <div class="room-meta">
+            <span>30 m²</span><span class="dot">•</span>
+            <span>Private Balcony</span><span class="dot">•</span>
+            <span>Mountain view</span>
+          </div>
+
+          <p class="room-desc">
+            Cozy and compact, perfect for couples seeking a peaceful getaway with stunning views.
+          </p>
+        </article>
+
+        <!-- card 2 -->
+        <article class="room-slide">
+          <div class="room-frame">
+            <img src="{% static 'images/rooms/room-2.jpg' %}" alt="Chimgan">
+          </div>
+
+          <h3 class="room-name">Chimgan</h3>
+          <div class="room-price">$250.0 <span>/ NIGHT</span></div>
+
+          <div class="room-meta">
+            <span>45 m²</span><span class="dot">•</span>
+            <span>Fireplace</span><span class="dot">•</span>
+            <span>Mountain view</span>
+          </div>
+
+          <p class="room-desc">
+            A warm retreat with rustic charm, ideal for small families or groups of friends.
+          </p>
+        </article>
+
+        <!-- card 3 -->
+        <article class="room-slide">
+          <div class="room-frame">
+            <img src="{% static 'images/rooms/room-3.jpg' %}" alt="Bildersoy">
+          </div>
+
+          <h3 class="room-name">Bildersoy</h3>
+          <div class="room-price">$350.0 <span>/ NIGHT</span></div>
+
+          <div class="room-meta">
+            <span>60 m²</span><span class="dot">•</span>
+            <span>Private terrace</span><span class="dot">•</span>
+            <span>Mountain view</span>
+          </div>
+
+          <p class="room-desc">
+            Surrounded by nature, the perfect choice for relaxation and immersion in the wilderness.
+          </p>
+        </article>
+      </div>
+
+      <button class="rooms-arrow rooms-arrow--right" type="button" aria-label="Next" data-rooms-next>›</button>
+    </div>
+
+  </div>
+</section>
