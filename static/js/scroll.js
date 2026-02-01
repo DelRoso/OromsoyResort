@@ -1,72 +1,86 @@
-const header = document.getElementById('siteHeader');
-const burger = document.querySelector('.menu-toggle');
-const closeBtn = document.querySelector('.menu-close');
-const mobileMenu = document.querySelector('.mobile-menu');
-
-const toggleHeader = () => {
+document.addEventListener('DOMContentLoaded', () => {
+  const header = document.getElementById('siteHeader');
   if (!header) return;
-  if (window.scrollY > 40) header.classList.add('scrolled');
-  else header.classList.remove('scrolled');
-};
 
-const openMenu = () => {
-  if (!header || !burger || !mobileMenu) return;
-  header.classList.add('menu-open');
-  document.body.classList.add('menu-open');
-  burger.setAttribute('aria-expanded', 'true');
-  mobileMenu.setAttribute('aria-hidden', 'false');
-};
+  const burger = header.querySelector('.menu-toggle');
+  const closeBtn = header.querySelector('.menu-close');
+  const mobileMenu = header.querySelector('.mobile-menu');
 
-const closeMenu = () => {
-  if (!header || !burger || !mobileMenu) return;
-  header.classList.remove('menu-open');
-  document.body.classList.remove('menu-open');
-  burger.setAttribute('aria-expanded', 'false');
-  mobileMenu.setAttribute('aria-hidden', 'true');
-};
+  // ===== Header scroll state =====
+  const toggleHeader = () => {
+    if (window.scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  };
 
-const toggleMenu = () => {
-  if (!header) return;
-  if (header.classList.contains('menu-open')) closeMenu();
-  else openMenu();
-};
+  // ===== Mobile menu open/close =====
+  const openMenu = () => {
+    if (!burger || !mobileMenu) return;
 
-if (burger) {
-  burger.addEventListener('click', (e) => {
-    e.preventDefault();
-    toggleMenu();
+    header.classList.add('menu-open');
+    document.body.classList.add('menu-open');
+
+    burger.setAttribute('aria-expanded', 'true');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+  };
+
+  const closeMenu = () => {
+    if (!burger || !mobileMenu) return;
+
+    header.classList.remove('menu-open');
+    document.body.classList.remove('menu-open');
+
+    burger.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+  };
+
+  const toggleMenu = () => {
+    if (header.classList.contains('menu-open')) closeMenu();
+    else openMenu();
+  };
+
+  // Click handlers
+  if (burger) {
+    burger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMenu();
+    });
+  }
+
+  // Close on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
   });
-}
 
-if (closeBtn) {
-  closeBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    closeMenu();
+  // Close when clicking a link inside mobile menu (and smooth scroll)
+  const allNavLinks = header.querySelectorAll('a[href^="#"]');
+  allNavLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return;
+
+      const target = document.querySelector(href);
+      if (!target) return;
+
+      e.preventDefault();
+
+      const offset = header.offsetHeight || 0;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+
+      window.scrollTo({ top, behavior: 'smooth' });
+      closeMenu();
+    });
   });
-}
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeMenu();
+  // Init + listeners
+  window.addEventListener('scroll', toggleHeader, { passive: true });
+  window.addEventListener('load', toggleHeader);
+  toggleHeader();
 });
-
-// smooth anchors + close on click
-document.querySelectorAll('a[href^="#"]').forEach((link) => {
-  link.addEventListener('click', (event) => {
-    const targetId = link.getAttribute('href');
-    if (!targetId || targetId === '#') return;
-
-    const target = document.querySelector(targetId);
-    if (!target) return;
-
-    event.preventDefault();
-
-    const offset = header ? header.offsetHeight : 0;
-    const top = target.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top, behavior: 'smooth' });
-
-    closeMenu();
-  });
-});
-
-window.addEventListener('scroll', toggleHeader, { passive: true });
-window.addEventListener('load', toggleHeader);
