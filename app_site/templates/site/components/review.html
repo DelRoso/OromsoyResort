@@ -1,96 +1,176 @@
 {% load static %}
 
 <section id="reviews" class="section reviews">
-  <div class="reviews-overlay"></div>
+  <!-- фон секции -->
+  <div class="reviews-bg" aria-hidden="true"></div>
+  <div class="reviews-overlay" aria-hidden="true"></div>
 
   <div class="container reviews-inner">
-    <div class="reviews-grid">
 
-      <!-- LEFT: FORM CARD -->
-      <div class="reviews-form">
-        <div class="reviews-form__card">
-          <div class="reviews-form__head">
-            <span class="reviews-line"></span>
-            <h2 class="reviews-title">PEOPLE <em>REVIEWS</em></h2>
-            <p class="reviews-subtitle">
-              Leave your review — it will appear after admin approval.
-            </p>
-          </div>
+    <!-- H1 всей секции -->
+    <h1 class="reviews-h1">PEOPLE <em>REVIEWS</em></h1>
 
-          <form class="reviews-form__body" method="post" enctype="multipart/form-data" action="#reviews">
-            {% csrf_token %}
-
-            <div class="rf-row">
-              <label class="rf-label" for="{{ review_form.full_name.id_for_label }}">Full name</label>
-              {{ review_form.full_name }}
-            </div>
-
-            <div class="rf-row">
-              <label class="rf-label" for="{{ review_form.short_title.id_for_label }}">Short title</label>
-              {{ review_form.short_title }}
-            </div>
-
-            <div class="rf-row">
-              <label class="rf-label" for="{{ review_form.photo.id_for_label }}">Photo (optional)</label>
-              {{ review_form.photo }}
-              <div class="rf-help">PNG/JPG, up to ~5MB.</div>
-            </div>
-
-            <div class="rf-row">
-              <label class="rf-label" for="{{ review_form.text.id_for_label }}">Your review</label>
-              {{ review_form.text }}
-            </div>
-
-            <button class="btn-primary rf-submit" type="submit">SEND</button>
-
-            <div class="rf-footnote">
-              After sending, your review goes to moderation and will appear after admin approval.
-            </div>
-          </form>
-        </div>
+    <!-- =========================
+         TOP CAROUSEL (3 cards) — ДОЛЖЕН БЫТЬ ВЫШЕ ВСЕГО
+    ========================= -->
+    <div class="reviews-top">
+      <div class="reviews-top-head">
+        <span class="reviews-line"></span>
+        <h2 class="reviews-top-title">ALL REVIEWS</h2>
       </div>
 
-      <!-- RIGHT: CAROUSEL -->
-      <div class="reviews-show" data-reviews>
-        <div class="reviews-show__card">
+      <div class="reviews-top-slider" data-reviews-top>
+        <button class="reviews-top-arrow reviews-top-arrow--left"
+                type="button"
+                aria-label="Previous"
+                data-reviews-top-prev>‹</button>
 
-          <div class="reviews-show__top">
-            <span class="reviews-show__star">✳</span>
-          </div>
+        <div class="reviews-top-track" data-reviews-top-track>
+          {% if reviews %}
+            {% for r in reviews %}
+              <article class="review-mini">
+                <div class="review-mini__avatar">
+                  {% if r.photo %}
+                    <img src="{{ r.photo.url }}" alt="{{ r.full_name }}">
+                  {% else %}
+                    <div class="review-mini__stub"></div>
+                  {% endif %}
+                </div>
 
-          <div class="reviews-carousel" data-reviews-track>
+                <h3 class="review-mini__title">{{ r.short_title|upper }}</h3>
+                <p class="review-mini__text">“{{ r.text }}”</p>
+                <div class="review-mini__name">{{ r.full_name|upper }}</div>
+              </article>
+            {% endfor %}
+          {% else %}
+            <article class="review-mini review-mini--empty">
+              <h3 class="review-mini__title">NO REVIEWS YET</h3>
+              <p class="review-mini__text">Be the first to leave a review 🙂</p>
+              <div class="review-mini__name">OROMSOY RESORT</div>
+            </article>
+          {% endif %}
+        </div>
+
+        <button class="reviews-top-arrow reviews-top-arrow--right"
+                type="button"
+                aria-label="Next"
+                data-reviews-top-next>›</button>
+      </div>
+    </div>
+
+    <!-- =========================
+         BOTTOM AREA (2 blocks)
+         Desktop: left = latest, right = form
+         Mobile:  top carousel (already) -> latest -> form (LAST)
+    ========================= -->
+    <div class="reviews-bottom">
+
+      <!-- LEFT: Latest comments (2 last, but they also exist in top carousel) -->
+      <div class="reviews-latest">
+        <div class="reviews-block-head">
+          <span class="reviews-line reviews-line--sm"></span>
+          <h2 class="reviews-block-title">ПОСЛЕДНИЕ КОММЕНТАРИИ</h2>
+        </div>
+
+        <div class="reviews-feature" data-reviews-feature>
+          <button class="reviews-feature-close" type="button" aria-hidden="true">✳</button>
+
+          <button class="reviews-feature-arrow reviews-feature-arrow--left"
+                  type="button"
+                  aria-label="Previous"
+                  data-reviews-feature-prev>‹</button>
+
+          <div class="reviews-feature-track" data-reviews-feature-track>
             {% if reviews %}
-              {% for r in reviews %}
-                <article class="review-slide{% if forloop.first %} is-active{% endif %}" data-review-slide>
-                  <div class="review-ava">
+              {% for r in reviews|slice:":2" %}
+                <article class="review-feature-card {% if forloop.first %}is-active{% endif %}">
+                  <div class="review-feature-avatar">
                     {% if r.photo %}
                       <img src="{{ r.photo.url }}" alt="{{ r.full_name }}">
                     {% else %}
-                      <div class="review-ava__stub"></div>
+                      <div class="review-feature-stub"></div>
                     {% endif %}
                   </div>
 
-                  <h3 class="review-title">{{ r.short_title|upper }}</h3>
-
-                  <p class="review-text">“{{ r.text }}”</p>
-
-                  <div class="review-name">{{ r.full_name|upper }}</div>
+                  <h3 class="review-feature-title">{{ r.short_title|upper }}</h3>
+                  <p class="review-feature-text">“{{ r.text }}”</p>
+                  <div class="review-feature-name">{{ r.full_name|upper }}</div>
                 </article>
               {% endfor %}
             {% else %}
-              <article class="review-slide is-active" data-review-slide>
-                <div class="review-ava">
-                  <div class="review-ava__stub"></div>
-                </div>
-                <h3 class="review-title">NO REVIEWS YET</h3>
-                <p class="review-text">“Be the first to leave a review 🙂”</p>
-                <div class="review-name">OROMSOY RESORT</div>
+              <article class="review-feature-card is-active">
+                <div class="review-feature-stub"></div>
+                <h3 class="review-feature-title">NO REVIEWS YET</h3>
+                <p class="review-feature-text">“Be the first to leave a review 🙂”</p>
+                <div class="review-feature-name">OROMSOY RESORT</div>
               </article>
             {% endif %}
           </div>
 
-          <!-- dots (без стрелок как ты хотел) -->
-          <div class="reviews-dots" data-reviews-dots aria-hidden="false"></div>
+          <button class="reviews-feature-arrow reviews-feature-arrow--right"
+                  type="button"
+                  aria-label="Next"
+                  data-reviews-feature-next>›</button>
+
+          <div class="reviews-feature-dots" data-reviews-feature-dots aria-hidden="false"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Review form -->
+      <div class="reviews-form-wrap">
+        <div class="reviews-block-head">
+          <span class="reviews-line reviews-line--sm"></span>
+          <h2 class="reviews-block-title">ОСТАВЬТЕ СВОЙ ОТЗЫВ</h2>
+        </div>
+
+        <div class="reviews-form-card">
+          <p class="reviews-form-note">
+            Leave your review — it will appear after admin approval.
+          </p>
+
+          <form class="reviews-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="reviews-field">
+              <label class="reviews-label" for="{{ review_form.full_name.id_for_label }}">FULL NAME</label>
+              {{ review_form.full_name }}
+              {% if review_form.full_name.errors %}
+                <div class="reviews-error">{{ review_form.full_name.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="reviews-field">
+              <label class="reviews-label" for="{{ review_form.short_title.id_for_label }}">SHORT TITLE</label>
+              {{ review_form.short_title }}
+              {% if review_form.short_title.errors %}
+                <div class="reviews-error">{{ review_form.short_title.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="reviews-field">
+              <label class="reviews-label" for="{{ review_form.photo.id_for_label }}">PHOTO (OPTIONAL)</label>
+              {{ review_form.photo }}
+              <div class="reviews-hint">PNG/JPG, up to ~5MB.</div>
+              {% if review_form.photo.errors %}
+                <div class="reviews-error">{{ review_form.photo.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="reviews-field">
+              <label class="reviews-label" for="{{ review_form.text.id_for_label }}">YOUR REVIEW</label>
+              {{ review_form.text }}
+              {% if review_form.text.errors %}
+                <div class="reviews-error">{{ review_form.text.errors }}</div>
+              {% endif %}
+            </div>
+
+            <button class="btn-primary reviews-send" type="submit">SEND</button>
+
+            <p class="reviews-after">
+              After sending, your review goes to moderation and will appear after admin approval.
+            </p>
+
+          </form>
         </div>
       </div>
 

@@ -1,103 +1,99 @@
 document.addEventListener('DOMContentLoaded', () => {
   /* =========================
-     REVIEWS — CAROUSEL (fade) + autoplay + swipe
+     TOP CAROUSEL — 3 cards + arrows + swipe scroll
   ========================= */
 
-  const root = document.querySelector('[data-reviews]');
-  if (!root) return;
+  const top = document.querySelector('[data-reviews-top]');
+  if (top) {
+    const track = top.querySelector('[data-reviews-top-track]');
+    const prev = top.querySelector('[data-reviews-top-prev]');
+    const next = top.querySelector('[data-reviews-top-next]');
 
-  const track = root.querySelector('[data-reviews-track]');
-  const dotsWrap = root.querySelector('[data-reviews-dots]');
-  if (!track || !dotsWrap) return;
+    const getStep = () => {
+      // шаг = ширина одной карточки + gap
+      const card = track?.querySelector('.review-mini');
+      if (!card) return 320;
+      const styles = getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+      return card.getBoundingClientRect().width + gap;
+    };
 
-  const slides = Array.from(track.querySelectorAll('[data-review-slide]'));
-  if (!slides.length) return;
+    if (prev && track) prev.addEventListener('click', () => track.scrollBy({ left: -getStep(), behavior: 'smooth' }));
+    if (next && track) next.addEventListener('click', () => track.scrollBy({ left:  getStep(), behavior: 'smooth' }));
+  }
 
-  let active = Math.max(0, slides.findIndex(s => s.classList.contains('is-active')));
-  if (active === -1) active = 0;
+  /* =========================
+     FEATURE (Latest 2 comments) — small carousel
+  ========================= */
 
-  // скорость/логика автоплея (мс = миллисекунды)
-  const AUTOPLAY_MS = 4500;       // <-- меняешь тут скорость
-  const RESUME_IDLE_MS = 3500;    // <-- через сколько без действий снова авто
-  let autoplayTimer = null;
-  let resumeTimer = null;
-  let userPaused = false;
+  const feature = document.querySelector('[data-reviews-feature]');
+  if (!feature) return;
 
-  const setActive = (idx) => {
-    active = (idx + slides.length) % slides.length;
-    slides.forEach((s, i) => s.classList.toggle('is-active', i === active));
+  const cards = Array.from(feature.querySelectorAll('.review-feature-card'));
+  const dotsWrap = feature.querySelector('[data-reviews-feature-dots]');
+  const prevBtn = feature.querySelector('[data-reviews-feature-prev]');
+  const nextBtn = feature.querySelector('[data-reviews-feature-next]');
 
-    const dots = dotsWrap.querySelectorAll('.reviews-dot');
-    dots.forEach((d, i) => d.classList.toggle('is-active', i === active));
-  };
+  if (!cards.length) return;
 
-  const markUserInteraction = () => {
-    userPaused = true;
-    stopAutoplay(false);
+  let idx = Math.max(0, cards.findIndex(c => c.classList.contains('is-active')));
+  if (idx < 0) idx = 0;
 
-    window.clearTimeout(resumeTimer);
-    resumeTimer = window.setTimeout(() => {
-      userPaused = false;
-      startAutoplay();
-    }, RESUME_IDLE_MS);
-  };
+  const makeDots = () => {
+    if (!dotsWrap) return;
 
-  const startAutoplay = () => {
-    if (autoplayTimer) return;
-    if (slides.length <= 1) return;
-    if (userPaused) return;
-
-    autoplayTimer = window.setInterval(() => {
-      setActive(active + 1);
-    }, AUTOPLAY_MS);
-  };
-
-  const stopAutoplay = (clearResume) => {
-    if (autoplayTimer) {
-      window.clearInterval(autoplayTimer);
-      autoplayTimer = null;
-    }
-    if (clearResume) {
-      window.clearTimeout(resumeTimer);
-      resumeTimer = null;
-    }
-  };
-
-  // dots build
-  dotsWrap.innerHTML = '';
-  slides.forEach((_, i) => {
-    const dot = document.createElement('button');
-    dot.type = 'button';
-    dot.className = 'reviews-dot' + (i === active ? ' is-active' : '');
-    dot.addEventListener('click', () => {
-      markUserInteraction();
-      setActive(i);
+    dotsWrap.innerHTML = '';
+    cards.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'reviews-feature-dot' + (i === idx ? ' is-active' : '');
+      b.addEventListener('click', () => go(i));
+      dotsWrap.appendChild(b);
     });
-    dotsWrap.appendChild(dot);
-  });
+  };
 
-  setActive(active);
-  startAutoplay();
+  const setActive = () => {
+    cards.forEach((c, i) => c.classList.toggle('is-active', i === idx));
+    if (!dotsWrap) return;
+    const dots = dotsWrap.querySelectorAll('.reviews-feature-dot');
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+  };
 
-  // swipe (mobile)
-  let startX = 0;
-  let endX = 0;
-  const SWIPE_THRESHOLD = 45;
+  const go = (nextIndex) => {
+    idx = (nextIndex + cards.length) % cards.length;
+    setActive();
+  };
 
-  track.addEventListener('touchstart', (e) => {
-    startX = e.changedTouches[0].screenX;
-  }, { passive: true });
+  const next = () => go(idx + 1);
+  const prev = () => go(idx - 1);
 
-  track.addEventListener('touchend', (e) => {
-    endX = e.changedTouches[0].screenX;
-    const dx = endX - startX;
-    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+  if (prevBtn) prevBtn.addEventListener('click', prev);
+  if (nextBtn) nextBtn.addEventListener('click', next);
 
-    markUserInteraction();
-    if (dx < 0) setActive(active + 1);
-    else setActive(active - 1);
-  }, { passive: true });
+  makeDots();
+  setActive();
 
-  // если человек тыкает по блоку — это считается взаимодействием
-  root.addEventListener('mousedown', markUserInteraction);
+  /* автопрокрутка последних 2-х (мягко) */
+  const AUTOPLAY_MS = 3500;
+  let timer = null;
+
+  const start = () => {
+    if (cards.length <= 1) return;
+    if (timer) return;
+    timer = window.setInterval(next, AUTOPLAY_MS);
+  };
+
+  const stop = () => {
+    if (timer) {
+      window.clearInterval(timer);
+      timer = null;
+    }
+  };
+
+  // пауза при взаимодействии
+  feature.addEventListener('mouseenter', stop);
+  feature.addEventListener('mouseleave', start);
+  feature.addEventListener('touchstart', stop, { passive: true });
+
+  start();
 });
