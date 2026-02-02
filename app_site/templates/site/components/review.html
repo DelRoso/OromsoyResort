@@ -1,0 +1,99 @@
+{% load static %}
+
+<section id="reviews" class="section reviews">
+  <div class="reviews-overlay"></div>
+
+  <div class="container reviews-inner">
+    <div class="reviews-grid">
+
+      <!-- LEFT: FORM CARD -->
+      <div class="reviews-form">
+        <div class="reviews-form__card">
+          <div class="reviews-form__head">
+            <span class="reviews-line"></span>
+            <h2 class="reviews-title">PEOPLE <em>REVIEWS</em></h2>
+            <p class="reviews-subtitle">
+              Leave your review — it will appear after admin approval.
+            </p>
+          </div>
+
+          <form class="reviews-form__body" method="post" enctype="multipart/form-data" action="#reviews">
+            {% csrf_token %}
+
+            <div class="rf-row">
+              <label class="rf-label" for="{{ review_form.full_name.id_for_label }}">Full name</label>
+              {{ review_form.full_name }}
+            </div>
+
+            <div class="rf-row">
+              <label class="rf-label" for="{{ review_form.short_title.id_for_label }}">Short title</label>
+              {{ review_form.short_title }}
+            </div>
+
+            <div class="rf-row">
+              <label class="rf-label" for="{{ review_form.photo.id_for_label }}">Photo (optional)</label>
+              {{ review_form.photo }}
+              <div class="rf-help">PNG/JPG, up to ~5MB.</div>
+            </div>
+
+            <div class="rf-row">
+              <label class="rf-label" for="{{ review_form.text.id_for_label }}">Your review</label>
+              {{ review_form.text }}
+            </div>
+
+            <button class="btn-primary rf-submit" type="submit">SEND</button>
+
+            <div class="rf-footnote">
+              After sending, your review goes to moderation and will appear after admin approval.
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT: CAROUSEL -->
+      <div class="reviews-show" data-reviews>
+        <div class="reviews-show__card">
+
+          <div class="reviews-show__top">
+            <span class="reviews-show__star">✳</span>
+          </div>
+
+          <div class="reviews-carousel" data-reviews-track>
+            {% if reviews %}
+              {% for r in reviews %}
+                <article class="review-slide{% if forloop.first %} is-active{% endif %}" data-review-slide>
+                  <div class="review-ava">
+                    {% if r.photo %}
+                      <img src="{{ r.photo.url }}" alt="{{ r.full_name }}">
+                    {% else %}
+                      <div class="review-ava__stub"></div>
+                    {% endif %}
+                  </div>
+
+                  <h3 class="review-title">{{ r.short_title|upper }}</h3>
+
+                  <p class="review-text">“{{ r.text }}”</p>
+
+                  <div class="review-name">{{ r.full_name|upper }}</div>
+                </article>
+              {% endfor %}
+            {% else %}
+              <article class="review-slide is-active" data-review-slide>
+                <div class="review-ava">
+                  <div class="review-ava__stub"></div>
+                </div>
+                <h3 class="review-title">NO REVIEWS YET</h3>
+                <p class="review-text">“Be the first to leave a review 🙂”</p>
+                <div class="review-name">OROMSOY RESORT</div>
+              </article>
+            {% endif %}
+          </div>
+
+          <!-- dots (без стрелок как ты хотел) -->
+          <div class="reviews-dots" data-reviews-dots aria-hidden="false"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
