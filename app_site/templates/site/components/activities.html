@@ -1,27 +1,60 @@
 {% load static %}
-<!-- Activities -->
-  <section id="activities" class="section activities">
-    <div class="container">
-      <h2>Активный отдых</h2>
-      <p class="section-lead">
-        Свежий воздух, снег и лучшие активности региона — всё рядом с вашим номером.
-      </p>
-      <div class="activities-grid">
-        <div class="activity-card">
-          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Горные лыжи</h3>
-          <p>Трассы всех уровней сложности в 5 минутах от отеля.</p>
+
+<section id="activities" class="section activities">
+  <div class="activities-grid">
+
+    <!-- LEFT: edge-to-edge carousel -->
+    <div class="activities-left" aria-label="Activities gallery" data-activities>
+      <div class="activities-carousel" data-activities-track>
+        <!-- добавляй сколько угодно -->
+        <div class="activities-slide is-active">
+          <img src="{% static 'images/rooms/test.n1.jpg' %}" alt="Activity 1" loading="lazy">
         </div>
-        <div class="activity-card">
-          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Снегоходы</h3>
-          <p>Сафари по заснеженным маршрутам с профессиональными гидами.</p>
+        <div class="activities-slide">
+          <img src="{% static 'images/rooms/amirsoy1.jpg' %}" alt="Activity 2" loading="lazy">
         </div>
-        <div class="activity-card">
-          <div class="activity-image" style="background-image: url({% static 'images/background/test1.jpg' %});"></div>
-          <h3>Спа и релакс</h3>
-          <p>Сауна, массаж и панорамный релакс‑зал после активного дня.</p>
+        <div class="activities-slide">
+          <img src="{% static 'images/rooms/amirsoy2.jpg' %}" alt="Activity 3" loading="lazy">
         </div>
-        </div>
+      </div>
+
+      <!-- точки -->
+      <div class="activities-dots" data-activities-dots aria-hidden="false"></div>
+
+      <!-- стрелки (по умолчанию скрыты в css как и в about) -->
+      <button class="activities-arrow activities-arrow--left" type="button" aria-label="Previous" data-activities-prev>‹</button>
+      <button class="activities-arrow activities-arrow--right" type="button" aria-label="Next" data-activities-next>›</button>
     </div>
-  </section>
+
+    <!-- RIGHT: content inside container -->
+    <div class="activities-right">
+      <div class="container">
+        <div class="activities-content">
+          <span class="activities-line"></span>
+
+          <h2 class="activities-title">
+            RESORT <span class="activities-accent">ACTIVITIES</span><br>
+            ALL YEAR ROUND
+          </h2>
+
+          <p class="activities-lead">
+            From snowy adventures to calm nature walks — choose your vibe and enjoy every moment.
+          </p>
+
+          <p class="activities-text">
+            Discover a curated list of experiences for couples, families, and adventure lovers.
+            Skiing, snowboarding, hiking, ATV rides, sauna rituals, and cozy evenings with mountain views.
+          </p>
+
+          <p class="activities-text">
+            We update activities by season to keep it fresh: winter sports in cold months,
+            scenic trekking and outdoor fun in warm months — always with comfort and safety.
+          </p>
+
+          <a class="btn-primary activities-btn" href="#contacts">BOOK NOW</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

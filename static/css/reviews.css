@@ -469,7 +469,6 @@
   }
 
   .review-mini{
-    /* 84vw + 8vw слева + 8vw справа = 100vw => идеальный центр */
     flex: 0 0 84vw;
     min-width: 84vw;
     scroll-snap-align: center;

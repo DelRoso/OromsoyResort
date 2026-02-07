@@ -1,22 +1,91 @@
 {% load static %}
-<!-- Contacts -->
-  <section id="contacts" class="section contacts">
-    <div class="container">
-      <h2>Contacts</h2>
-      <p class="section-lead">Мы всегда на связи и готовы подобрать идеальный вариант отдыха.</p>
-      <div class="contacts-grid">
-        <div class="contact-card">
-          <h3>Адрес</h3>
-          <p>Узбекистан, Ташкентская область, Чимган</p>
-        </div>
-        <div class="contact-card">
-          <h3>Телефон</h3>
-          <p>+998 (90) 123‑45‑67</p>
-        </div>
-        <div class="contact-card">
-          <h3>Почта</h3>
-          <p>hello@oromsoyresort.uz</p>
+
+<section id="contacts" class="section location">
+  <div class="location-grid">
+
+    <!-- LEFT: contact card (instead of form) -->
+    <div class="location-left">
+      <div class="container">
+        <div class="location-card">
+
+          <span class="location-line"></span>
+
+          <h2 class="location-title">
+            FIND & <span class="location-accent">CONTACT</span> US
+          </h2>
+
+          <p class="location-subtitle">
+            We’re always happy to help with booking, questions, and special requests.
+          </p>
+
+          <div class="location-items">
+            <div class="location-item">
+              <div class="location-ico" aria-hidden="true">📍</div>
+              <div class="location-item-body">
+                <div class="location-label">Address</div>
+                <div class="location-value">
+                  Oromsoy Resort, Chimgan Mountains<br>
+                  Tashkent Region, Uzbekistan
+                </div>
+                <a class="location-link" href="#" data-copy="Oromsoy Resort, Chimgan Mountains, Tashkent Region, Uzbekistan">
+                  Copy address
+                </a>
+              </div>
+            </div>
+
+            <div class="location-item">
+              <div class="location-ico" aria-hidden="true">✉️</div>
+              <div class="location-item-body">
+                <div class="location-label">Email</div>
+                <div class="location-value">
+                  <a class="location-link-strong" href="mailto:info@oromsoyresort.uz">info@oromsoyresort.uz</a>
+                </div>
+                <a class="location-link" href="#" data-copy="info@oromsoyresort.uz">
+                  Copy email
+                </a>
+              </div>
+            </div>
+
+            <div class="location-item">
+              <div class="location-ico" aria-hidden="true">📞</div>
+              <div class="location-item-body">
+                <div class="location-label">Phone</div>
+                <div class="location-value">
+                  <a class="location-link-strong" href="tel:+998900000000">+998 (90) 000-00-00</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="location-item">
+              <div class="location-ico" aria-hidden="true">🕒</div>
+              <div class="location-item-body">
+                <div class="location-label">Working hours</div>
+                <div class="location-value">Daily: 09:00 — 21:00</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="location-actions">
+            <a class="btn-primary location-btn" href="#booking">Call Us</a>
+            <a class="location-secondary" href="#" data-open-map>Open in Google Maps</a>
+          </div>
+
+          <div class="location-toast" role="status" aria-live="polite" data-toast></div>
         </div>
       </div>
     </div>
-  </section>
+
+    <!-- RIGHT: map -->
+    <div class="location-right">
+      <!-- ВАРИАНТ 1: iframe -->
+      <iframe
+        class="location-map"
+        title="Oromsoy Resort location"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps?q=41.507893978033906,69.95175481365118&z=16&output=embed">
+      </iframe>
+    </div>
+
+  </div>
+</section>
