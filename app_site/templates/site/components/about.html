@@ -10,52 +10,54 @@
           <span class="about-line"></span>
 
           <h2 class="about-title">
-            YOUR <span class="about-accent">LUXURIOUS</span> HOLIDAY<br>
-            IN THE MOUNTAINS
+            Приезжайте туда, где <span class="about-accent">отдых</span> ощущается по-настоящему.<br>
           </h2>
 
           <p class="about-lead">
-            Join us and make your dream winter holiday a reality in the picturesque mountains,
-            where every moment becomes a cherished memory.
+            Oromsoy Resort — это место, куда приезжают за эмоциями,
+            а уезжают с желанием вернуться.
           </p>
 
           <p class="about-text">
-            Welcome to the luxurious realm of our 5-star mountain resort, where an unforgettable experience awaits you.
-            Prepare for a year-round journey into a world of hospitality, filled with activities perfect for nature enthusiasts,
-            families, and winter sports aficionados.
+            Это ваш уютный дом в горах для тех, кто устал от шума и спешки.
+            В самом сердце гор, среди величественных вершин Большого Чимгана, Бельдерсая и Амирсая, время словно замедляется, а каждый вдох наполняет силой.
           </p>
 
           <p class="about-text">
-            Immerse yourself in the breathtaking natural beauty that surrounds us, complemented by our elegantly appointed
-            apartments designed for your utmost comfort. Whether you seek adventure on the slopes or relaxation amidst stunning
-            landscapes, our resort has it all.
+            Здесь утро начинается с тишины, нарушаемой лишь ветром в кронах и далёким эхом гор.
+            Панорамные виды захватывают дух, а кристально чистый горный воздух ощущается иначе — глубже, свободнее, по-настоящему живо.
+          </p>
+
+          <p class="about-text">
+            Oromsoy создан для полного перезагрузочного отдыха:
+            для спокойных прогулок, неспешных разговоров, уединения и настоящего комфорта вдали от города.
+            Это место, где легко отключиться от повседневных забот и снова услышать себя.
+          </p>
+
+          <p class="about-text">
+            Особое удовольствие — авторская домашняя кухня, приготовленная с душой и вниманием к деталям.
+            Натуральные продукты, уникальные рецепты и вкус, который хочется запомнить и вернуть с собой.
           </p>
 
           <a class="btn-primary about-btn" href="#rooms">LEARN MORE</a>
         </div>
       </div>
     </div>
-    <!-- RIGHT: edge-to-edge carousel -->
-    <div class="about-right" aria-label="About gallery" data-about>
-      <div class="about-carousel" data-about-track>
-        <!-- Дальше просто добавляй сколько угодно -->
-        <div class="about-slide is-active">
-          <img src="{% static 'images/background/test1.jpg' %}" alt="Resort view 1" loading="lazy">
-        </div>
-        <div class="about-slide">
-          <img src="{% static 'images/rooms/test.n1.jpg' %}" alt="Resort view 2" loading="lazy">
-        </div>
-        <div class="about-slide">
-          <img src="{% static 'images/rooms/amirsoy1.jpg' %}" alt="Resort view 3" loading="lazy">
-        </div>
-      </div>
 
-      <!-- точки -->
-      <div class="about-dots" data-about-dots aria-hidden="false"></div>
-
-      <!-- стрелки -->
-      <button class="about-arrow about-arrow--left" type="button" aria-label="Previous" data-about-prev>‹</button>
-      <button class="about-arrow about-arrow--right" type="button" aria-label="Next" data-about-next>›</button>
+    <!-- RIGHT: edge-to-edge video -->
+    <div class="about-right about-video">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="{% static 'images/background/about-poster.jpg' %}"
+      >
+        <source src="{% static 'video/about.mp4' %}" type="video/mp4">
+      </video>
     </div>
+
   </div>
 </section>
+

@@ -1,89 +1,32 @@
-/* Rooms — сетка номеров */
-.rooms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-
-/* Rooms — карточка номера */
-.room-card {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Rooms — изображение номера */
-.room-image {
-  height: 220px;
-  background: center/cover no-repeat;
-}
-
-/* Rooms — заголовок карточки */
-.room-card h3 {
-  padding: 20px 20px 10px;
-}
-
-/* Rooms — описание номера */
-.room-card p {
-  padding: 0 20px;
-  color: #666;
-}
-
-/* Rooms — цена */
-.price {
-  display: block;
-  padding: 10px 20px;
-  font-weight: bold;
-  color: #192f6a;
-}
-
-/* Rooms — кнопка в карточке */
-.room-card .btn-primary {
-  margin: 20px;
-}
-
-/* =========================
-   Rooms Slider (reference-style)
-========================= */
-
+/* ===== базовые стили секции ===== */
 .rooms {
   background: #f7f9fc;
   position: relative;
   overflow: hidden;
 }
 
-/* лёгкий топографический паттерн как на скрине */
 .rooms::before{
   content:"";
   position:absolute;
   inset:0;
   opacity: .22;
   pointer-events:none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260' viewBox='0 0 420 260'%3E%3Cg fill='none' stroke='%23c7cfdd' stroke-width='1'%3E%3Cpath d='M10 70c40-30 90-30 130 0s90 30 130 0 90-30 130 0'/%3E%3Cpath d='M-20 120c50-35 110-35 160 0s110 35 160 0 110-35 160 0'/%3E%3Cpath d='M0 180c60-25 120-25 180 0s120 25 180 0 120-25 180 0'/%3E%3Cpath d='M40 30c30-18 70-18 100 0s70 18 100 0 70-18 100 0'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url('/static/images/background/back-section.JPG');
   background-repeat: repeat;
   background-size: 520px auto;
 }
 
-.rooms .container{
-  position: relative;
-  z-index: 1;
-}
+.rooms .container { position: relative; z-index: 1; }
 
-/* header line + title + button */
 .rooms-head{
   display:flex;
   align-items:flex-start;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 44px;
+  margin-bottom: 34px;
 }
 
-.rooms-title{
-  display:flex;
-  align-items:flex-start;
-  gap: 20px;
-}
+.rooms-title{ display:flex; align-items:flex-start; gap: 20px; }
 
 .rooms-line{
   width: 78px;
@@ -94,7 +37,7 @@
 }
 
 .rooms h2{
-  text-align:left;         /* переопределяем центрированный h2 */
+  text-align:left;
   margin: 0;
   font-size: 40px;
   line-height: 1.1;
@@ -102,9 +45,7 @@
   letter-spacing: 1px;
 }
 
-.rooms h2 span{
-  color:#1c3c92;
-}
+.rooms h2 span{ color:#1c3c92; }
 
 .btn-ghost{
   display:inline-flex;
@@ -122,34 +63,42 @@
   transition: all .25s ease;
   white-space: nowrap;
 }
-.btn-ghost:hover{
-  background:#1c3c92;
-  color:#fff;
+.btn-ghost:hover{ background:#1c3c92; color:#fff; }
+
+.rooms-block{ margin-top: 18px; padding-top: 14px; }
+.rooms-block--second{ margin-top: 52px; padding-top: 16px; }
+
+.rooms-subhead{ display:flex; align-items:center; justify-content:flex-start; margin: 0 0 18px; }
+.rooms-subtitle{
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #1c3c92;
+  font-weight: 900;
 }
 
-/* slider wrapper */
-.rooms-slider{
-  position: relative;
-}
+/* ===== slider ===== */
+.rooms-slider{ position: relative; }
 
 .rooms-track{
   display:flex;
   gap: 32px;
-  overflow-x: auto;
+  overflow-x: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  padding: 0 56px; /* место под стрелки */
-  -ms-overflow-style: none;  /* IE */
-  scrollbar-width: none;     /* Firefox */
+  padding: 0 56px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .rooms-track::-webkit-scrollbar{ display:none; }
 
-/* 3 карточки в ряд */
 .room-slide{
   flex: 0 0 calc((100% - 64px) / 3);
   scroll-snap-align: center;
   text-align: center;
   min-width: 260px;
+  cursor: pointer;
 }
 
 .room-frame{
@@ -157,6 +106,11 @@
   border-radius: 2px;
   padding: 14px;
   box-shadow: 0 12px 30px rgba(7, 19, 46, .08);
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+.room-slide:hover .room-frame{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 42px rgba(7, 19, 46, .12);
 }
 
 .room-frame img{
@@ -197,9 +151,7 @@
   font-size: 13px;
   margin-bottom: 14px;
 }
-.room-meta .dot{
-  opacity: .8;
-}
+.room-meta .dot{ opacity: .8; }
 
 .room-desc{
   max-width: 340px;
@@ -217,78 +169,35 @@
   background: none;
   border: none;
   cursor: pointer;
-
   font-size: 36px;
   line-height: 1;
   color: #5b6b8a;
-
   padding: 0;
   z-index: 3;
   transition: color .2s ease, transform .2s ease;
 }
-
-.rooms-arrow:hover{
-  color: #1c3c92;
-  transform: translateY(-1px);
-}
-
+.rooms-arrow:hover{ color: #1c3c92; transform: translateY(-1px); }
 .rooms-arrow--left{ left: 8px; }
 .rooms-arrow--right{ right: 8px; }
 
-/* responsive */
 @media (max-width: 1024px){
-  .rooms-head{
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .rooms h2{
-    font-size: 34px;
-  }
-  .room-slide{
-    flex-basis: calc((100% - 32px) / 2); /* 2 карточки */
-  }
-  .rooms-arrow{
-    top: 138px;
-  }
+  .rooms-head{ flex-direction: column; align-items: flex-start; }
+  .rooms h2{ font-size: 34px; }
+  .room-slide{ flex-basis: calc((100% - 32px) / 2); }
+  .rooms-arrow{ top: 138px; }
 }
 
 @media (max-width: 640px){
   .rooms-line{ display:none; }
   .rooms h2{ font-size: 28px; }
-  .rooms-track{ padding: 0 44px; }
-  .room-slide{
-    flex-basis: 100%; /* 1 карточка */
-  }
+  .rooms-track{ padding: 0 44px; overflow-x: auto; }
+  .room-slide{ flex-basis: 100%; }
   .room-frame img{ height: 280px; }
 }
 
 /* =========================
-   Rooms: clickable cards + modal
+   MODAL (FIXED)
 ========================= */
-
-/* hover + кликабельность */
-.room-slide{
-  cursor: pointer;
-  transition: transform .2s ease;
-}
-
-.room-frame{
-  transition: box-shadow .25s ease, transform .25s ease;
-}
-
-.room-slide:hover .room-frame{
-  transform: translateY(-2px);
-  box-shadow: 0 16px 42px rgba(7, 19, 46, .12);
-}
-
-.room-slide:active .room-frame{
-  transform: translateY(0px);
-}
-
-/* =========================
-   Rooms: modal redesign + fullscreen
-========================= */
-
 .room-modal{ display:none; }
 .room-modal.is-open{
   display:block;
@@ -300,20 +209,26 @@
 .room-modal__backdrop{
   position:absolute;
   inset:0;
-  background: rgba(7, 19, 46, .65);
+  background: rgba(7, 19, 46, .35);
   backdrop-filter: blur(6px);
 }
 
+/* ✅ ВАЖНО: панель flex + ограничение по высоте, чтобы ничего не улетало */
 .room-modal__panel{
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(980px, calc(100% - 28px));
+  width: min(1100px, calc(100% - 28px));
+  height: min(88vh, 760px);
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 24px 70px rgba(7, 19, 46, .35);
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .room-modal__close{
@@ -327,11 +242,13 @@
   cursor: pointer;
   font-size: 26px;
   color: #3b4a68;
-  z-index: 5;
+  z-index: 6;
 }
 
 .room-modal__top{
   padding: 16px 18px 10px;
+  background:#fff;
+  flex: 0 0 auto;
 }
 
 .room-modal__title{
@@ -342,10 +259,157 @@
   color:#1c3c92;
 }
 
-/* slider area */
-.room-modal__slider{
+/* pages */
+.room-modal__page{
+  display:none;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.room-modal__page.is-active{
+  display:flex;
+  flex-direction: column;
+}
+
+/* ========= PAGE 1: DETAILS (ПК/планшет: 2 колонки) ========= */
+.room-modal__page--details{ background:#fff; }
+
+.room-modal__details{
+  flex: 1 1 auto;
+  min-height: 0;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  padding: 0 18px 18px;
+}
+
+/* LEFT: белый фон, фото НЕ режем */
+.room-modal__detailsMedia{
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(17, 30, 58, .08);
+
+  min-height: 0;
+  height: 100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.room-modal__hero{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+}
+
+.room-modal__heroImg{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* ✅ не режем */
+  object-position: center;
+  display:block;
+  cursor: zoom-in;
+}
+
+/* стрелки (без кружков) */
+.room-modal__arrow{
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 46px;
+  line-height: 1;
+  color: rgba(28,60,146,.55);
+  z-index: 3;
+  user-select:none;
+}
+.room-modal__arrow:hover{ color:#1c3c92; }
+
+.room-modal__detailsNav .room-modal__arrow{
+  position:absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.room-modal__detailsNav .room-modal__arrow--left{ left: 10px; }
+.room-modal__detailsNav .room-modal__arrow--right{ right: 10px; }
+
+/* dots */
+.room-modal__dots{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.room-modal__dots--details{
+  position:absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+}
+
+.room-modal__dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(28,60,146,.25);
+  border:0;
+  cursor:pointer;
+}
+.room-modal__dot.is-active{ background: rgba(28,60,146,1); }
+
+/* RIGHT: ✅ ограничение + скролл внутри */
+.room-modal__detailsInfo{
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+
+  padding: 10px 18px 18px;
+  border-left: 1px solid rgba(17, 30, 58, .08);
+}
+
+.room-modal__priceBottom{
+  font-weight: 900;
+  color:#1c3c92;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.room-modal__meta{
+  color:#5b6b8a;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.room-modal__descFull{
+  color:#7b879e;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.room-modal__descFull ul{ margin: 8px 0 0 18px; }
+
+.room-modal__actions{ margin-top: 14px; }
+
+/* ========= PAGE 2: GALLERY ========= */
+.room-modal__page--gallery{
+  background:#fff;
+  padding: 0;
+}
+
+.room-modal__slider--gallery{
   position: relative;
   padding: 0 54px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display:flex;
+  flex-direction: column;
 }
 
 .room-modal__track{
@@ -357,6 +421,9 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
   padding: 0 0 10px;
+
+  flex: 1 1 auto;
+  min-height: 0;
 }
 .room-modal__track::-webkit-scrollbar{ display:none; }
 
@@ -365,106 +432,74 @@
   scroll-snap-align: center;
   border-radius: 10px;
   overflow:hidden;
-  background:#eef2fa;
+  background:#fff;
+  border: 1px solid rgba(17, 30, 58, .08);
 }
 
 .room-modal__img img{
   width: 100%;
-  height: min(56vh, 520px);
-  display:block;
-  object-fit: cover;
-  cursor: zoom-in; /* подсказка, что можно открыть full */
+  height: 100%;
+  object-fit: contain; /* ✅ не режем */
+  background:#fff;
+  cursor: zoom-in;
 }
 
-/* arrows: чистые, без кружков */
-.room-modal__arrow{
+/* стрелки на gallery */
+.room-modal__page--gallery .room-modal__arrow{
   position:absolute;
   top: 50%;
   transform: translateY(-50%);
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 46px;
-  line-height: 1;
-  color: rgba(59, 74, 104, .55);
-  transition: color .2s ease, transform .2s ease;
-  z-index: 3;
 }
-.room-modal__arrow:hover{
-  color:#1c3c92;
-  transform: translateY(-50%) translateY(-1px);
-}
-.room-modal__arrow--left{ left: 10px; }
-.room-modal__arrow--right{ right: 10px; }
+.room-modal__page--gallery .room-modal__arrow--left{ left: 10px; }
+.room-modal__page--gallery .room-modal__arrow--right{ right: 10px; }
 
-/* bottom row: цена по центру */
 .room-modal__bottom{
   padding: 12px 18px 18px;
   display:flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  flex: 0 0 auto;
 }
 
-.room-modal__priceBottom{
-  font-weight: 900;
+.room-modal__backToDetails{
+  position:absolute;
+  left: 18px;
+  top: 12px;
+  z-index: 5;
+  border: 0;
+  background: rgba(255,255,255,.95);
   color:#1c3c92;
+  font-weight: 900;
   letter-spacing: .8px;
   text-transform: uppercase;
-  font-size: 13px;
-}
-
-.room-modal__dots{
-  display:flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content:center;
-}
-
-.room-modal__dot{
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(28, 60, 146, .25);
+  font-size: 11px;
+  padding: 10px 12px;
+  border-radius: 10px;
   cursor:pointer;
-  border:0;
+  border: 1px solid rgba(17, 30, 58, .10);
 }
-.room-modal__dot.is-active{ background: rgba(28, 60, 146, 1); }
 
 body.modal-open{ overflow: hidden; }
 
-/* =========================
-   Fullscreen overlay
-========================= */
-
-.room-fs{
-  display:none;
-  touch-action: pan-y;
-}
+/* ===== FULLSCREEN ===== */
+.room-fs{ display:none; }
 .room-fs.is-open{
   display:block;
   position: fixed;
   inset: 0;
   z-index: 30000;
 }
-
-.room-fs__backdrop{
-  position:absolute;
-  inset:0;
-  background: rgba(0,0,0,.92);
-  z-index: 0;
-}
-
+.room-fs__backdrop{ position:absolute; inset:0; background: rgba(0,0,0,.88); }
 .room-fs__img{
   position:absolute;
-  inset: 0;
-  margin:auto;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
   max-width: 96vw;
   max-height: 92vh;
   object-fit: contain;
-  z-index: 1;
 }
-
 .room-fs__close{
   position:absolute;
   top: 14px;
@@ -476,12 +511,7 @@ body.modal-open{ overflow: hidden; }
   color:#fff;
   font-size: 30px;
   cursor:pointer;
-  z-index: 3;              /* ВАЖНО: выше картинки */
   border-radius: 10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  pointer-events: auto;    /* на всякий */
 }
 .room-fs__arrow{
   position:absolute;
@@ -492,47 +522,63 @@ body.modal-open{ overflow: hidden; }
   color: rgba(255,255,255,.75);
   font-size: 54px;
   cursor:pointer;
-  z-index: 3;
-  transition: color .2s ease, transform .2s ease;
-  user-select: none;
-}
-.room-fs__arrow:hover{
-  color:#fff;
-  transform: translateY(-50%) translateY(-1px);
+  user-select:none;
 }
 .room-fs__arrow--left{ left: 14px; }
 .room-fs__arrow--right{ right: 14px; }
 
-@media (max-width: 640px){
-  .room-fs__arrow{ font-size: 44px; }
-}
-
 /* =========================
-   Hide header when rooms modal is open
+   PHONE: fullscreen + 16:9 + scroll
 ========================= */
-
-body.modal-open .site-header{
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-10px);
-  transition: opacity .2s ease, transform .2s ease;
-}
-
-/* =========================
-   Responsive
-========================= */
-
-@media (max-width: 1024px){
-  .room-modal__panel{ width: min(820px, calc(100% - 22px)); }
-  .room-modal__slider{ padding: 0 46px; }
-  .room-modal__arrow{ font-size: 44px; }
-  .room-modal__img img{ height: min(54vh, 460px); }
-}
-
 @media (max-width: 640px){
-  .room-modal__panel{ border-radius: 10px; }
-  .room-modal__top{ padding: 14px 14px 8px; }
-  .room-modal__slider{ padding: 0 36px; }
-  .room-modal__arrow{ font-size: 40px; }
-  .room-modal__img img{ height: min(46vh, 360px); }
+  /* ✅ на телефоне скроллим ПАНЕЛЬ (не body) */
+  .room-modal__panel{
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transform: none;
+    border-radius: 0;
+
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .room-modal__page.is-active{
+    display:block; /* проще для мобилки */
+  }
+
+  .room-modal__details{
+    display:block;
+    padding: 0 14px 18px;
+  }
+
+  /* ✅ фото строго 16:9 */
+  .room-modal__detailsMedia{
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin-bottom: 12px;
+  }
+
+  /* ✅ убираем внутренний скролл справа, чтобы скроллилось всё окно */
+  .room-modal__detailsInfo{
+    height: auto;
+    overflow: visible;
+    border-left: none;
+    padding: 0;
+  }
+
+  .room-modal__slider--gallery{
+    padding: 0 44px;
+  }
+
+  .room-modal__img{
+    aspect-ratio: 16 / 9;
+  }
+
+  .room-modal__img img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }

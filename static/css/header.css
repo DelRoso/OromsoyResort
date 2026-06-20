@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   color: #fff;
-  background: url("../images/background/test1.jpg") center / cover no-repeat;
+  background: url("../images/background/back-elka.JPG ") center / cover no-repeat;
 }
 
 /* Hero — затемнение поверх фонового изображения */
@@ -172,12 +172,12 @@
 
 .social {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  align-items: flex-end;
+  gap: 1px;
 }
 
 .social img {
-  width: 18px;
+  width: 50px;
   opacity: 0.8;
   transition: opacity 0.25s ease;
 }
@@ -295,7 +295,7 @@
 .mobile-social{
   margin-top: 34px;
   display: flex;
-  gap: 18px;
+  gap: 50px;
   justify-content: center;
   align-items: center;
 }

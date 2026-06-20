@@ -1,43 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
   /* =========================
-     ROOMS — SLIDER (твоя логика, НЕ ЛОМАЛ)
+     SLIDERS
   ========================= */
+  document.querySelectorAll('[data-rooms-slider]').forEach((slider) => {
+    const track = slider.querySelector('[data-rooms-track]');
+    const prev = slider.querySelector('[data-rooms-prev]');
+    const next = slider.querySelector('[data-rooms-next]');
+    if (!track || !prev || !next) return;
 
-  const slider = document.querySelector('[data-rooms-slider]');
-  if (!slider) return;
+    const getCardWidth = () => {
+      const card = track.querySelector('.room-slide');
+      if (!card) return 320;
+      const styles = getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+      return card.getBoundingClientRect().width + gap;
+    };
 
-  const track = slider.querySelector('[data-rooms-track]');
-  const prev = slider.querySelector('[data-rooms-prev]');
-  const next = slider.querySelector('[data-rooms-next]');
-  if (!track || !prev || !next) return;
-
-  const getCardWidth = () => {
-    const card = track.querySelector('.room-slide');
-    if (!card) return 320;
-    const styles = getComputedStyle(track);
-    const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
-    return card.getBoundingClientRect().width + gap;
-  };
-
-  prev.addEventListener('click', () => track.scrollBy({ left: -getCardWidth(), behavior: 'smooth' }));
-  next.addEventListener('click', () => track.scrollBy({ left: getCardWidth(), behavior: 'smooth' }));
+    prev.addEventListener('click', () => track.scrollBy({ left: -getCardWidth(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: getCardWidth(), behavior: 'smooth' }));
+  });
 
   /* =========================
-     ROOMS — MODAL / GALLERY + AUTOCAROUSEL + FULLSCREEN
+     MODAL
   ========================= */
-
   const modal = document.querySelector('[data-room-modal]');
   if (!modal) return;
 
   const modalTitle = modal.querySelector('[data-room-modal-title]');
-  const modalPrice = modal.querySelector('[data-room-modal-price]');
+  const modalPriceEls = modal.querySelectorAll('[data-room-modal-price]');
   const modalTrack = modal.querySelector('[data-room-modal-track]');
-  const dotsWrap = modal.querySelector('[data-room-modal-dots]');
-  const modalPrev = modal.querySelector('[data-room-modal-prev]');
-  const modalNext = modal.querySelector('[data-room-modal-next]');
+  const dotsEls = modal.querySelectorAll('[data-room-modal-dots]');
+  const modalPrevBtns = modal.querySelectorAll('[data-room-modal-prev]');
+  const modalNextBtns = modal.querySelectorAll('[data-room-modal-next]');
   const closeEls = modal.querySelectorAll('[data-room-modal-close]');
 
-  // fullscreen overlay
+  const pageDetails = modal.querySelector('[data-room-modal-page="details"]');
+  const pageGallery = modal.querySelector('[data-room-modal-page="gallery"]');
+
+  const heroImg = modal.querySelector('[data-room-modal-hero-img]');
+  const metaBox = modal.querySelector('[data-room-modal-meta]');
+  const descBox = modal.querySelector('[data-room-modal-desc]');
+
+  const btnOpenGallery = modal.querySelector('[data-room-modal-open-gallery]');
+  const btnBackDetails = modal.querySelector('[data-room-modal-back-details]');
+
+  // fullscreen
   const fs = modal.querySelector('[data-room-fs]');
   const fsImg = modal.querySelector('[data-room-fs-img]');
   const fsCloseEls = modal.querySelectorAll('[data-room-fs-close]');
@@ -47,123 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
   let slides = [];
   let activeIndex = 0;
 
-  // autoplay state
-  const AUTOPLAY_MS = 1000; // скорость автокарусели (мс)
-  const RESUME_IDLE_MS = 1500; // через сколько без действий снова включать автоплей (мс)
+  // autoplay only in gallery
+  const AUTOPLAY_MS = 1000;
+  const RESUME_IDLE_MS = 1500;
   let autoplayInterval = null;
   let resumeTimeout = null;
   let userPaused = false;
 
   const isOpen = () => modal.classList.contains('is-open');
   const isFsOpen = () => fs && fs.classList.contains('is-open');
-
-  const openModal = () => {
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-
-    // FIX: при открытии карточки скрываем хедер через CSS (body.modal-open .site-header { ... })
-    document.body.classList.add('modal-open');
-
-    startAutoplay(); // по дефолту автокарусель включена
-  };
-
-  const closeModal = () => {
-    stopAutoplay(true);
-    closeFullscreen();
-
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
-
-    // FIX: возвращаем хедер обратно
-    document.body.classList.remove('modal-open');
-
-    modalTrack.innerHTML = '';
-    dotsWrap.innerHTML = '';
-    slides = [];
-    activeIndex = 0;
-  };
-
-  /* =========================
-     FULLSCREEN — render/open/close + paging
-  ========================= */
-
-  const renderFs = () => {
-    if (!fs || !fsImg) return;
-    if (!slides[activeIndex]) return;
-
-    const imgEl = slides[activeIndex].querySelector('img');
-    if (!imgEl) return;
-
-    fsImg.src = imgEl.src;
-  };
-
-  const openFullscreen = () => {
-    if (!fs || !fsImg) return;
-    fs.classList.add('is-open');
-    fs.setAttribute('aria-hidden', 'false');
-    renderFs();
-  };
-
-  const closeFullscreen = () => {
-    if (!fs || !fsImg) return;
-    fs.classList.remove('is-open');
-    fs.setAttribute('aria-hidden', 'true');
-    fsImg.src = '';
-  };
-
-  // fullscreen close (крестик + фон)
-  fsCloseEls.forEach((el) => el.addEventListener('click', closeFullscreen));
-
-  /* =========================
-     CORE — dots/scroll helpers
-  ========================= */
-
-  const setActiveDot = (idx) => {
-    const dots = dotsWrap.querySelectorAll('.room-modal__dot');
-    dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-  };
-
-  const scrollToIndex = (idx, behavior = 'smooth') => {
-    if (!slides[idx]) return;
-    activeIndex = idx;
-
-    const el = slides[idx];
-    modalTrack.scrollTo({ left: el.offsetLeft, behavior });
-    setActiveDot(idx);
-
-    // если fullscreen открыт — синхронизируем картинку
-    if (isFsOpen()) renderFs();
-  };
-
-  const nextIndex = () => (activeIndex + 1) % Math.max(1, slides.length);
-  const prevIndex = () => (activeIndex - 1 + slides.length) % Math.max(1, slides.length);
-
-  /* =========================
-     AUTOPLAY — твоя логика, но с синхрой fullscreen
-  ========================= */
-
-  const markUserInteraction = () => {
-    // пользователь начал управлять — ставим на паузу
-    userPaused = true;
-    stopAutoplay(false);
-
-    // после простоя снова включаем автоплей
-    window.clearTimeout(resumeTimeout);
-    resumeTimeout = window.setTimeout(() => {
-      userPaused = false;
-      if (isOpen()) startAutoplay();
-    }, RESUME_IDLE_MS);
-  };
-
-  const startAutoplay = () => {
-    if (autoplayInterval || slides.length <= 1) return;
-    if (userPaused) return;
-
-    autoplayInterval = window.setInterval(() => {
-      if (!isOpen()) return;
-      scrollToIndex(nextIndex(), 'smooth');
-    }, AUTOPLAY_MS);
-  };
+  const isGalleryMode = () => pageGallery && pageGallery.classList.contains('is-active');
 
   const stopAutoplay = (clearResumeTimer) => {
     if (autoplayInterval) {
@@ -176,153 +76,205 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  /* =========================
-     BUILD MODAL
-  ========================= */
+  const markUserInteraction = () => {
+    userPaused = true;
+    stopAutoplay(false);
 
-  const rebuildModal = ({ title, price, images }) => {
-    if (modalTitle) modalTitle.textContent = title || 'ROOM';
-    if (modalPrice) modalPrice.textContent = price || '';
+    window.clearTimeout(resumeTimeout);
+    resumeTimeout = window.setTimeout(() => {
+      userPaused = false;
+      if (isOpen() && isGalleryMode()) startAutoplay();
+    }, RESUME_IDLE_MS);
+  };
+
+  const startAutoplay = () => {
+    if (!isGalleryMode()) return;
+    if (autoplayInterval || slides.length <= 1) return;
+    if (userPaused) return;
+
+    autoplayInterval = window.setInterval(() => {
+      if (!isOpen() || !isGalleryMode()) return;
+      scrollToIndex(nextIndex(), 'smooth');
+    }, AUTOPLAY_MS);
+  };
+
+  const showDetails = () => {
+    pageGallery?.classList.remove('is-active');
+    pageDetails?.classList.add('is-active');
+    stopAutoplay(false);
+
+    // чтобы не "торчал край" галереи
+    if (modalTrack) {
+      modalTrack.style.pointerEvents = 'none';
+      modalTrack.style.overflowX = 'hidden';
+      modalTrack.scrollLeft = 0;
+    }
+  };
+
+  const showGallery = () => {
+    pageDetails?.classList.remove('is-active');
+    pageGallery?.classList.add('is-active');
+
+    if (modalTrack) {
+      modalTrack.style.pointerEvents = '';
+      modalTrack.style.overflowX = 'auto';
+    }
+
+    if (isOpen()) startAutoplay();
+  };
+
+  btnOpenGallery?.addEventListener('click', showGallery);
+  btnBackDetails?.addEventListener('click', showDetails);
+
+  const openModal = () => {
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    showDetails();
+  };
+
+  const closeFullscreen = () => {
+    if (!fs || !fsImg) return;
+    fs.classList.remove('is-open');
+    fs.setAttribute('aria-hidden', 'true');
+    fsImg.src = '';
+  };
+
+  const closeModal = () => {
+    stopAutoplay(true);
+    closeFullscreen();
+
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+
+    if (modalTrack) modalTrack.innerHTML = '';
+    dotsEls.forEach((d) => (d.innerHTML = ''));
+
+    slides = [];
+    activeIndex = 0;
+    userPaused = false;
+
+    if (heroImg) heroImg.src = '';
+    if (metaBox) metaBox.innerHTML = '';
+    if (descBox) descBox.innerHTML = '';
+  };
+
+  const renderFs = () => {
+    if (!fs || !fsImg) return;
+    const imgEl = slides[activeIndex]?.querySelector('img') || heroImg;
+    if (!imgEl) return;
+    fsImg.src = imgEl.src;
+  };
+
+  const openFullscreen = () => {
+    if (!fs || !fsImg) return;
+    fs.classList.add('is-open');
+    fs.setAttribute('aria-hidden', 'false');
+    renderFs();
+  };
+
+  fsCloseEls.forEach((el) => el.addEventListener('click', closeFullscreen));
+
+  const buildDots = (count) => {
+    dotsEls.forEach((wrap) => {
+      wrap.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'room-modal__dot' + (i === 0 ? ' is-active' : '');
+        dot.addEventListener('click', () => {
+          markUserInteraction();
+          scrollToIndex(i);
+        });
+        wrap.appendChild(dot);
+      }
+    });
+  };
+
+  const setActiveDot = (idx) => {
+    dotsEls.forEach((wrap) => {
+      const dots = wrap.querySelectorAll('.room-modal__dot');
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    });
+  };
+
+  const scrollToIndex = (idx, behavior = 'smooth') => {
+    if (!slides[idx]) return;
+    activeIndex = idx;
+    setActiveDot(idx);
+
+    const imgEl = slides[idx].querySelector('img');
+    if (heroImg && imgEl) heroImg.src = imgEl.src;
+
+    if (isGalleryMode() && modalTrack) {
+      modalTrack.scrollTo({ left: slides[idx].offsetLeft, behavior });
+    }
+
+    if (isFsOpen()) renderFs();
+  };
+
+  const nextIndex = () => (activeIndex + 1) % Math.max(1, slides.length);
+  const prevIndex = () => (activeIndex - 1 + slides.length) % Math.max(1, slides.length);
+
+  const rebuildModal = ({ title, price, metaHtml, descHtml, images }) => {
+    modalTitle.textContent = title || 'ROOM';
+    modalPriceEls.forEach((el) => (el.textContent = price || ''));
+
+    if (metaBox) metaBox.innerHTML = metaHtml || '';
+    if (descBox) descBox.innerHTML = descHtml || '';
 
     modalTrack.innerHTML = '';
-    dotsWrap.innerHTML = '';
     slides = [];
 
-    images.forEach((src, i) => {
+    images.forEach((src) => {
       const slide = document.createElement('div');
       slide.className = 'room-modal__img';
       slide.innerHTML = `<img src="${src}" alt="${title || 'Room photo'}">`;
 
-      // fullscreen по клику на фото
       slide.querySelector('img').addEventListener('click', (e) => {
         e.stopPropagation();
-        markUserInteraction(); // клик — это действие
+        markUserInteraction();
         openFullscreen();
       });
 
       modalTrack.appendChild(slide);
       slides.push(slide);
-
-      const dot = document.createElement('button');
-      dot.type = 'button';
-      dot.className = 'room-modal__dot' + (i === 0 ? ' is-active' : '');
-      dot.addEventListener('click', () => {
-        markUserInteraction();
-        scrollToIndex(i);
-      });
-      dotsWrap.appendChild(dot);
     });
+
+    buildDots(images.length);
 
     activeIndex = 0;
-    modalTrack.scrollTo({ left: 0, behavior: 'auto' });
     setActiveDot(0);
 
-    // сброс режимов автоплея при открытии
+    if (heroImg) {
+      heroImg.src = images[0] || '';
+      heroImg.onclick = (e) => {
+        e.stopPropagation();
+        markUserInteraction();
+        openFullscreen();
+      };
+    }
+
     userPaused = false;
     stopAutoplay(true);
+
+    modalTrack.scrollTo({ left: 0, behavior: 'auto' });
+    showDetails();
   };
 
-  // трекинг активного слайда по скроллу (и это считается действием пользователя)
-  let scrollTimer = null;
-  modalTrack.addEventListener('scroll', () => {
-    if (!slides.length) return;
+  // prev/next buttons
+  modalPrevBtns.forEach((btn) => btn.addEventListener('click', () => { markUserInteraction(); scrollToIndex(prevIndex()); }));
+  modalNextBtns.forEach((btn) => btn.addEventListener('click', () => { markUserInteraction(); scrollToIndex(nextIndex()); }));
 
-    // если пользователь скроллит руками — ставим паузу
-    markUserInteraction();
+  // fullscreen prev/next
+  fsPrev?.addEventListener('click', () => { markUserInteraction(); scrollToIndex(prevIndex()); renderFs(); });
+  fsNext?.addEventListener('click', () => { markUserInteraction(); scrollToIndex(nextIndex()); renderFs(); });
 
-    window.clearTimeout(scrollTimer);
-    scrollTimer = window.setTimeout(() => {
-      const trackLeft = modalTrack.scrollLeft;
-
-      let best = 0;
-      let bestDist = Infinity;
-      slides.forEach((s, i) => {
-        const dist = Math.abs(s.offsetLeft - trackLeft);
-        if (dist < bestDist) {
-          bestDist = dist;
-          best = i;
-        }
-      });
-
-      activeIndex = best;
-      setActiveDot(best);
-
-      // синхра fullscreen, если он открыт
-      if (isFsOpen()) renderFs();
-    }, 80);
-  });
-
-  // кнопки модалки
-  if (modalPrev) {
-    modalPrev.addEventListener('click', () => {
-      markUserInteraction();
-      scrollToIndex(prevIndex());
-    });
-  }
-
-  if (modalNext) {
-    modalNext.addEventListener('click', () => {
-      markUserInteraction();
-      scrollToIndex(nextIndex());
-    });
-  }
-
-  // кнопки fullscreen prev/next (если есть в HTML)
-  if (fsPrev) {
-    fsPrev.addEventListener('click', () => {
-      markUserInteraction();
-      scrollToIndex(prevIndex());
-      renderFs();
-    });
-  }
-
-  if (fsNext) {
-    fsNext.addEventListener('click', () => {
-      markUserInteraction();
-      scrollToIndex(nextIndex());
-      renderFs();
-    });
-  }
-
-  // закрытие модалки
+  // close modal
   closeEls.forEach((el) => el.addEventListener('click', closeModal));
 
-  // клавиатура
-  document.addEventListener('keydown', (e) => {
-    // fullscreen режим
-    if (isFsOpen()) {
-      if (e.key === 'Escape') closeFullscreen();
-      if (e.key === 'ArrowLeft') {
-        markUserInteraction();
-        scrollToIndex(prevIndex());
-        renderFs();
-      }
-      if (e.key === 'ArrowRight') {
-        markUserInteraction();
-        scrollToIndex(nextIndex());
-        renderFs();
-      }
-      return;
-    }
-
-    // обычная модалка
-    if (!isOpen()) return;
-
-    if (e.key === 'Escape') closeModal();
-    if (e.key === 'ArrowLeft') {
-      markUserInteraction();
-      scrollToIndex(prevIndex());
-    }
-    if (e.key === 'ArrowRight') {
-      markUserInteraction();
-      scrollToIndex(nextIndex());
-    }
-  });
-
-  /* =========================
-     ROOMS — OPEN MODAL ON CARD CLICK
-  ========================= */
-
+  // open modal from card
   document.querySelectorAll('.room-slide[data-images]').forEach((card) => {
     card.addEventListener('click', () => {
       const title =
@@ -335,61 +287,22 @@ document.addEventListener('DOMContentLoaded', () => {
         card.querySelector('.room-price')?.textContent?.trim() ||
         '';
 
-      const imagesRaw = card.getAttribute('data-images') || '';
-      const images = imagesRaw.split(',').map((s) => s.trim()).filter(Boolean);
+      const images = (card.getAttribute('data-images') || '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
       if (!images.length) return;
 
-      rebuildModal({ title, price, images });
+      const metaHtml = card.querySelector('.room-meta')?.innerHTML || '';
+      const shortDesc = card.querySelector('.room-desc')?.textContent?.trim() || '';
+
+      const fullEl = card.querySelector('.room-desc-full');
+      const fullHtml = fullEl ? fullEl.innerHTML.trim() : '';
+
+      const descHtml = fullHtml || shortDesc;
+
+      rebuildModal({ title, price, metaHtml, descHtml, images });
       openModal();
     });
   });
-
-  // когда модалка открылась — запускаем автоплей (если пользователь не трогает)
-  const observer = new MutationObserver(() => {
-    if (isOpen()) startAutoplay();
-  });
-  observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
-
-  /* =========================
-     FULLSCREEN — TOUCH SWIPE (MOBILE)
-  ========================= */
-
-  let fsTouchStartX = 0;
-  let fsTouchEndX = 0;
-  const FS_SWIPE_THRESHOLD = 40; // px, чувствительность свайпа
-
-  if (fs) {
-    fs.addEventListener(
-      'touchstart',
-      (e) => {
-        if (!isFsOpen()) return;
-        fsTouchStartX = e.changedTouches[0].screenX;
-      },
-      { passive: true }
-    );
-
-    fs.addEventListener('touchend', (e) => {
-      if (!isFsOpen()) return;
-      fsTouchEndX = e.changedTouches[0].screenX;
-      handleFsSwipe();
-    });
-  }
-
-  const handleFsSwipe = () => {
-    const deltaX = fsTouchEndX - fsTouchStartX;
-
-    if (Math.abs(deltaX) < FS_SWIPE_THRESHOLD) return;
-
-    markUserInteraction();
-
-    if (deltaX < 0) {
-      // свайп влево → next
-      scrollToIndex(nextIndex());
-      renderFs();
-    } else {
-      // свайп вправо → prev
-      scrollToIndex(prevIndex());
-      renderFs();
-    }
-  };
 });
