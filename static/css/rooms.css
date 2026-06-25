@@ -114,72 +114,97 @@
 .rooms-track{
   display:flex;
   gap: 32px;
+  align-items: stretch;
   overflow-x: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  padding: 0 56px;
+  padding: 18px 56px 30px;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .rooms-track::-webkit-scrollbar{ display:none; }
 
+/*
+  Карточка номера.
+  Вся существующая начинка остаётся прежней: фото, название, цена,
+  характеристики и описание. Здесь меняется только её визуальная оболочка.
+*/
 .room-slide{
   flex: 0 0 calc((100% - 64px) / 3);
   scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
   text-align: center;
   min-width: 260px;
+  padding: 14px 14px 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,250,247,.96));
+  box-shadow:
+    0 22px 46px rgba(29, 52, 65, .13),
+    0 5px 14px rgba(29, 52, 65, .07);
   cursor: pointer;
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
 }
 
 .room-frame {
-  width: 88%;
+  width: 100%;
   margin: 0 auto;
-  background: transparent;
-
-  border: 4px solid rgba(255, 248, 235, 0.35);
-  border-radius: 3px;
+  background: #dce3e5;
+  border: 0;
+  border-radius: 19px;
   padding: 0;
   overflow: hidden;
-
-  box-shadow: 0 10px 22px rgba(30, 65, 90, .12);
-  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+  box-shadow: 0 16px 28px rgba(30, 65, 90, .16);
 }
 
 .room-frame img {
   width: 100%;
-  height: 300px;
+  height: 286px;
   object-fit: cover;
   display: block;
+  transition: transform .55s ease;
 }
 
-.room-slide:hover .room-frame {
-  transform: translateY(-8px) scale(1.015);
-
-  border-color: rgba(255, 255, 255, 0.82);
-
+.room-slide:hover {
+  transform: translateY(-7px);
+  border-color: rgba(255, 255, 255, 1);
   box-shadow:
-    0 24px 46px rgba(19, 48, 79, .30),
-    0 8px 16px rgba(28, 60, 146, .16);
+    0 30px 58px rgba(19, 48, 79, .19),
+    0 9px 20px rgba(28, 60, 146, .09);
+}
+
+.room-slide:hover .room-frame img {
+  transform: scale(1.025);
 }
 
 .room-name{
-  margin: 18px 0 8px;
-  font-size: 16px;
-  letter-spacing: 1px;
-  color: #3a3a3a;
+  margin: 17px 0 7px;
+  font-size: 18px;
+  letter-spacing: 1.4px;
+  line-height: 1.2;
+  color: #29343a;
   text-transform: uppercase;
+  font-weight: 900;
 }
 
 .room-price{
   font-weight: 800;
-  color:#1c3c92;
-  font-size: 18px;
+  color:#17449f;
+  font-size: 19px;
   letter-spacing: .5px;
-  margin-bottom: 14px;
+  line-height: 1.45;
+  margin-bottom: 13px;
 }
 .room-price span{
   font-weight: 700;
-  color:#3a3a3a;
+  color:#38444a;
   font-size: 12px;
   margin-left: 4px;
 }
@@ -187,27 +212,30 @@
 .room-meta{
   display:flex;
   justify-content:center;
+  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  color:black;
+  color:#52636b;
   font-size: 13px;
-  margin-bottom: 14px;
+  line-height: 1.55;
+  margin: 0 auto 12px;
 }
-.room-meta .dot{ opacity: .8; }
+.room-meta .dot{ opacity: .55; }
 
 .room-desc{
   max-width: 340px;
   margin: 0 auto;
-  color:black;
+  color:#526069;
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.72;
   font-style: italic;
+  flex-grow: 1;
 }
 
 /* arrows */
 .rooms-arrow{
   position: absolute;
-  top: 145px;
+  top: 174px;
   background: none;
   border: none;
   cursor: pointer;
@@ -226,7 +254,8 @@
   .rooms-head{ flex-direction: column; align-items: flex-start; }
   .rooms h2{ font-size: 34px; }
   .room-slide{ flex-basis: calc((100% - 32px) / 2); }
-  .rooms-arrow{ top: 138px; }
+  .room-frame img{ height: 300px; }
+  .rooms-arrow{ top: 174px; }
 }
 
 @media (max-width: 640px){
@@ -245,14 +274,18 @@
   display:block;
   position: fixed;
   inset: 0;
-  z-index: 20000;
+  /*
+    Модалка переносится JavaScript-ом прямо в body и получает слой
+    выше хедера, мобильного меню и остальных фиксированных элементов.
+  */
+  z-index: 2147483000;
 }
 
 .room-modal__backdrop{
   position:absolute;
   inset:0;
-  background: rgba(7, 19, 46, .35);
-  backdrop-filter: blur(6px);
+  background: rgba(7, 19, 46, .42);
+  backdrop-filter: blur(8px);
 }
 
 /* ✅ ВАЖНО: панель flex + ограничение по высоте, чтобы ничего не улетало */
@@ -262,9 +295,27 @@
   top: 50%;
   transform: translate(-50%, -50%);
   width: min(1100px, calc(100% - 28px));
-  height: min(88vh, 760px);
-  background: #fff;
-  border-radius: 12px;
+  height: min(88dvh, 760px);
+  color: #15264b;
+  background:
+    radial-gradient(
+      circle at 18% 8%,
+      rgba(245, 226, 194, 0.62) 0%,
+      rgba(245, 226, 194, 0) 35%
+    ),
+    radial-gradient(
+      circle at 85% 90%,
+      rgba(111, 151, 169, 0.22) 0%,
+      rgba(111, 151, 169, 0) 42%
+    ),
+    linear-gradient(
+      135deg,
+      #e8edf0 0%,
+      #d9e2e7 45%,
+      #c5d3da 100%
+    );
+  border: 1px solid rgba(255,255,255,.72);
+  border-radius: 24px;
   box-shadow: 0 24px 70px rgba(7, 19, 46, .35);
   overflow: hidden;
 
@@ -274,23 +325,43 @@
 }
 
 .room-modal__close{
-  position:absolute;
-  right: 10px;
-  top: 8px;
-  width: 44px;
-  height: 44px;
+  flex: 0 0 auto;
+  min-width: 106px;
+  height: 42px;
   border: 0;
-  background: transparent;
+  border-radius: 999px;
+  border: 1px solid rgba(28, 60, 146, .14);
+  background: rgba(255,255,255,.42);
   cursor: pointer;
-  font-size: 26px;
-  color: #3b4a68;
-  z-index: 6;
+  color: #1c3c92;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.room-modal__closeText{
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .8px;
+  text-transform: uppercase;
 }
 
 .room-modal__top{
-  padding: 16px 18px 10px;
-  background:#fff;
+  min-height: 66px;
+  padding: 12px 14px 12px 18px;
+  background: rgba(238, 243, 245, .82);
   flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid rgba(17, 30, 58, .09);
+  backdrop-filter: blur(16px);
+  z-index: 7;
 }
 
 .room-modal__title{
@@ -298,6 +369,7 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   font-size: 16px;
+  line-height: 1.35;
   color:#1c3c92;
 }
 
@@ -313,24 +385,46 @@
 }
 
 /* ========= PAGE 1: DETAILS (ПК/планшет: 2 колонки) ========= */
-.room-modal__page--details{ background:#fff; }
+.room-modal__page--details{
+  background:
+    radial-gradient(
+      circle at 18% 8%,
+      rgba(245, 226, 194, 0.62) 0%,
+      rgba(245, 226, 194, 0) 35%
+    ),
+    radial-gradient(
+      circle at 85% 90%,
+      rgba(111, 151, 169, 0.22) 0%,
+      rgba(111, 151, 169, 0) 42%
+    ),
+    linear-gradient(
+      135deg,
+      #e8edf0 0%,
+      #d9e2e7 45%,
+      #c5d3da 100%
+    );
+}
 
 .room-modal__details{
   flex: 1 1 auto;
   min-height: 0;
   display:grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  padding: 0 18px 18px;
+  gap: 22px;
+  padding: 20px;
 }
 
-/* LEFT: белый фон, фото НЕ режем */
+/* LEFT: самостоятельный красивый фотоблок с навигацией поверх кадра. */
 .room-modal__detailsMedia{
   position: relative;
-  background: #fff;
-  border-radius: 12px;
+  isolation: isolate;
+  background: #111a24;
+  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(17, 30, 58, .08);
+  border: 1px solid rgba(255,255,255,.7);
+  box-shadow:
+    0 24px 46px rgba(17, 30, 58, .22),
+    inset 0 0 0 1px rgba(255,255,255,.08);
 
   min-height: 0;
   height: 100%;
@@ -338,46 +432,118 @@
   display:flex;
   align-items:center;
   justify-content:center;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.room-modal__detailsMedia::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(5,12,20,.08) 48%, rgba(5,12,20,.55) 100%);
 }
 
 .room-modal__hero{
+  position: relative;
   width:100%;
   height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#fff;
+  background:#111a24;
 }
 
 .room-modal__heroImg{
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;   /* ✅ не режем */
+  object-fit: cover;
   object-position: center;
   display:block;
   cursor: zoom-in;
+  will-change: opacity;
+  transition: opacity .26s ease, filter .2s ease;
+  -webkit-user-drag: none;
 }
 
-/* стрелки (без кружков) */
-.room-modal__arrow{
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 46px;
-  line-height: 1;
-  color: rgba(28,60,146,.55);
-  z-index: 3;
-  user-select:none;
+.room-modal__heroImg--incoming{
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
 }
-.room-modal__arrow:hover{ color:#1c3c92; }
+
+.room-modal__heroImg--incoming.is-visible{
+  opacity: 1;
+}
+
+.room-modal__heroImg--incoming.no-transition{
+  transition: none;
+}
+
+.room-modal__detailsMedia.is-touching .room-modal__heroImg{
+  filter: brightness(.94);
+}
+
+/* На ПК остаются только чистые шевроны — без кругов, рамок и фона. */
+.room-modal__arrow{
+  display: block;
+  width: 42px;
+  height: 58px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  font-size: 52px;
+  line-height: 1;
+  z-index: 4;
+  user-select: none;
+  text-shadow: 0 3px 14px rgba(0,0,0,.72);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.room-modal__arrow:hover{
+  opacity: .72;
+}
+
+.room-modal__detailsNav .room-modal__arrow--left:hover{
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.room-modal__detailsNav .room-modal__arrow--right:hover{
+  transform: translateY(-50%) translateX(2px);
+}
 
 .room-modal__detailsNav .room-modal__arrow{
   position:absolute;
   top: 50%;
   transform: translateY(-50%);
 }
-.room-modal__detailsNav .room-modal__arrow--left{ left: 10px; }
-.room-modal__detailsNav .room-modal__arrow--right{ right: 10px; }
+.room-modal__detailsNav .room-modal__arrow--left{ left: 16px; }
+.room-modal__detailsNav .room-modal__arrow--right{ right: 16px; }
+
+.room-modal__counter{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+  min-width: 58px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(8,19,31,.42);
+  backdrop-filter: blur(9px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.16);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-align: center;
+}
 
 /* dots */
 .room-modal__dots{
@@ -388,20 +554,33 @@
 }
 .room-modal__dots--details{
   position:absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 10px;
+  left: 50%;
+  right: auto;
+  bottom: 14px;
+  z-index: 4;
+  display: flex;
+  max-width: calc(100% - 100px);
+  padding: 0;
+  background: transparent;
+  transform: translateX(-50%);
 }
 
 .room-modal__dot{
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
+  padding: 0;
   border-radius: 50%;
-  background: rgba(28,60,146,.25);
+  background: rgba(255,255,255,.48);
   border:0;
   cursor:pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.48);
+  transition: width .28s ease, background .28s ease, opacity .28s ease;
 }
-.room-modal__dot.is-active{ background: rgba(28,60,146,1); }
+.room-modal__dot.is-active{
+  width: 22px;
+  border-radius: 999px;
+  background: #fff;
+}
 
 /* RIGHT: ✅ ограничение + скролл внутри */
 .room-modal__detailsInfo{
@@ -410,8 +589,12 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 
-  padding: 10px 18px 18px;
-  border-left: 1px solid rgba(17, 30, 58, .08);
+  padding: 22px 22px 24px;
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: 20px;
+  background: rgba(255,255,255,.48);
+  box-shadow: 0 18px 42px rgba(31, 52, 66, .1);
+  backdrop-filter: blur(10px);
 }
 
 .room-modal__priceBottom{
@@ -424,105 +607,47 @@
 }
 
 .room-modal__meta{
-  color:#5b6b8a;
+  color:#52657c;
   font-size: 13px;
   line-height: 1.6;
   margin-bottom: 10px;
 }
 
 .room-modal__descFull{
-  color:#7b879e;
+  color:#5f6d7d;
   font-size: 13px;
   line-height: 1.75;
 }
 .room-modal__descFull ul{ margin: 8px 0 0 18px; }
 
-.room-modal__actions{ margin-top: 14px; }
-
-/* ========= PAGE 2: GALLERY ========= */
-.room-modal__page--gallery{
-  background:#fff;
-  padding: 0;
+.room-modal__actions{
+  margin-top: 22px;
 }
 
-.room-modal__slider--gallery{
-  position: relative;
-  padding: 0 54px;
-  flex: 1 1 auto;
-  min-height: 0;
-  display:flex;
-  flex-direction: column;
+.room-modal__galleryLink{
+  min-height: 48px;
+  border-color: #1c3c92;
+  color: #1c3c92;
 }
 
-.room-modal__track{
-  display:flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  padding: 0 0 10px;
-
-  flex: 1 1 auto;
-  min-height: 0;
-}
-.room-modal__track::-webkit-scrollbar{ display:none; }
-
-.room-modal__img{
-  flex: 0 0 100%;
-  scroll-snap-align: center;
-  border-radius: 10px;
-  overflow:hidden;
-  background:#fff;
-  border: 1px solid rgba(17, 30, 58, .08);
+.room-modal__galleryLink:hover{
+  border-color: #1c3c92;
+  color: #fff;
+  background: #1c3c92;
 }
 
-.room-modal__img img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* ✅ не режем */
-  background:#fff;
-  cursor: zoom-in;
+body.modal-open{
+  overflow: hidden;
 }
 
-/* стрелки на gallery */
-.room-modal__page--gallery .room-modal__arrow{
-  position:absolute;
-  top: 50%;
-  transform: translateY(-50%);
+/*
+  Пока открыта модалка номера, хедер полностью убран из взаимодействия.
+  После закрытия класс modal-open снимается, и хедер появляется обратно.
+*/
+body.modal-open .site-header{
+  visibility: hidden;
+  pointer-events: none;
 }
-.room-modal__page--gallery .room-modal__arrow--left{ left: 10px; }
-.room-modal__page--gallery .room-modal__arrow--right{ right: 10px; }
-
-.room-modal__bottom{
-  padding: 12px 18px 18px;
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  flex: 0 0 auto;
-}
-
-.room-modal__backToDetails{
-  position:absolute;
-  left: 18px;
-  top: 12px;
-  z-index: 5;
-  border: 0;
-  background: rgba(255,255,255,.95);
-  color:#1c3c92;
-  font-weight: 900;
-  letter-spacing: .8px;
-  text-transform: uppercase;
-  font-size: 11px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  cursor:pointer;
-  border: 1px solid rgba(17, 30, 58, .10);
-}
-
-body.modal-open{ overflow: hidden; }
 
 /* ===== FULLSCREEN ===== */
 .room-fs{ display:none; }
@@ -530,22 +655,82 @@ body.modal-open{ overflow: hidden; }
   display:block;
   position: fixed;
   inset: 0;
-  z-index: 30000;
+  z-index: 2147483100;
 }
 .room-fs__backdrop{ position:absolute; inset:0; background: rgba(0,0,0,.88); }
+
+.room-fs__stage{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center center;
+  transition: transform .18s ease-out;
+  will-change: transform;
+  touch-action: none;
+}
+
+.room-fs.is-zoomed .room-fs__stage{
+  transition: none;
+}
+
 .room-fs__img{
   position:absolute;
-  left:50%;
-  top:50%;
-  transform: translate(-50%,-50%);
   max-width: 96vw;
   max-height: 92vh;
   object-fit: contain;
+  opacity: 1;
+  transition: opacity .26s ease;
+  will-change: opacity;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.room-fs__img--incoming{
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.room-fs__img--incoming.is-visible{
+  opacity: 1;
+}
+
+.room-fs__img--incoming.no-transition{
+  transition: none;
+}
+
+.room-fs__hint{
+  position: absolute;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 5;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: rgba(255,255,255,.82);
+  background: rgba(0,0,0,.36);
+  backdrop-filter: blur(8px);
+  font-size: 11px;
+  letter-spacing: .2px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: opacity .2s ease;
+  display: none;
+}
+
+.room-fs.is-zoomed .room-fs__hint{
+  opacity: 0;
 }
 .room-fs__close{
   position:absolute;
-  top: 14px;
-  right: 14px;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
   width: 48px;
   height: 48px;
   border: 0;
@@ -554,6 +739,7 @@ body.modal-open{ overflow: hidden; }
   font-size: 30px;
   cursor:pointer;
   border-radius: 10px;
+  z-index: 6;
 }
 .room-fs__arrow{
   position:absolute;
@@ -565,41 +751,89 @@ body.modal-open{ overflow: hidden; }
   font-size: 54px;
   cursor:pointer;
   user-select:none;
+  z-index: 5;
+  transition: opacity .2s ease;
 }
 .room-fs__arrow--left{ left: 14px; }
 .room-fs__arrow--right{ right: 14px; }
+
+.room-fs.is-zoomed .room-fs__arrow{
+  opacity: 0;
+  pointer-events: none;
+}
 
 /* =========================
    PHONE: fullscreen + 16:9 + scroll
 ========================= */
 @media (max-width: 640px){
-  /* ✅ на телефоне скроллим ПАНЕЛЬ (не body) */
+  .room-fs__hint{
+    display: block;
+    max-width: calc(100vw - 32px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 10px;
+  }
+
+  /*
+    Полноэкранная мобильная панель.
+    Верхняя строка остаётся видимой, а прокручивается только содержимое.
+  */
   .room-modal__panel{
     width: 100%;
-    height: 100%;
+    height: 100dvh;
     left: 0;
     top: 0;
     transform: none;
     border-radius: 0;
-
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
   }
 
   .room-modal__page.is-active{
-    display:block; /* проще для мобилки */
+    display:flex;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .room-modal__top{
+    min-height: calc(64px + env(safe-area-inset-top));
+    padding:
+      max(12px, env(safe-area-inset-top))
+      12px
+      10px
+      16px;
+    box-shadow: 0 8px 24px rgba(17, 30, 58, .08);
+  }
+
+  .room-modal__title{
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+  }
+
+  .room-modal__close{
+    min-width: 100px;
+    height: 44px;
+    border-color: #1c3c92;
+    background: #1c3c92;
+    color: #fff;
   }
 
   .room-modal__details{
     display:block;
-    padding: 0 14px 18px;
+    flex: 0 0 auto;
+    padding: 12px 12px max(28px, env(safe-area-inset-bottom));
   }
 
-  /* ✅ фото строго 16:9 */
+  /* Мобильная галерея: крупный кадр с удобной зоной для свайпа. */
   .room-modal__detailsMedia{
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     height: auto;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    border-radius: 18px;
+    box-shadow: 0 18px 34px rgba(17, 30, 58, .22);
   }
 
   /* ✅ убираем внутренний скролл справа, чтобы скроллилось всё окно */
@@ -607,20 +841,51 @@ body.modal-open{ overflow: hidden; }
     height: auto;
     overflow: visible;
     border-left: none;
-    padding: 0;
+    padding: 20px 16px;
+    border-radius: 18px;
   }
 
-  .room-modal__slider--gallery{
-    padding: 0 44px;
+  .room-modal__priceBottom{
+    font-size: 14px;
+    line-height: 1.55;
   }
 
-  .room-modal__img{
-    aspect-ratio: 16 / 9;
+  .room-modal__meta{
+    font-size: 14px;
   }
 
-  .room-modal__img img{
+  .room-modal__descFull{
+    color: #5f6d7d;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .room-modal__arrow{
+    display: none;
+  }
+
+  .room-modal__detailsNav .room-modal__arrow--left{
+    left: 10px;
+  }
+
+  .room-modal__detailsNav .room-modal__arrow--right{
+    right: 10px;
+  }
+
+  .room-modal__counter{
+    top: 10px;
+    right: 10px;
+    padding: 7px 10px;
+  }
+
+  .room-modal__dots--details{
+    bottom: 10px;
+    max-width: calc(100% - 120px);
+    padding: 7px 10px;
+  }
+
+  .room-modal__galleryLink{
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    min-height: 50px;
   }
 }

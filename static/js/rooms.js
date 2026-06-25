@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-  /* =========================
-     SLIDERS
-  ========================= */
+  /* =========================================================
+     ГОРИЗОНТАЛЬНЫЕ СЛАЙДЕРЫ КАРТОЧЕК НОМЕРОВ
+  ========================================================= */
   document.querySelectorAll('[data-rooms-slider]').forEach((slider) => {
     const track = slider.querySelector('[data-rooms-track]');
     const prev = slider.querySelector('[data-rooms-prev]');
@@ -11,297 +11,636 @@ document.addEventListener('DOMContentLoaded', () => {
     const getCardWidth = () => {
       const card = track.querySelector('.room-slide');
       if (!card) return 320;
+
       const styles = getComputedStyle(track);
       const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
       return card.getBoundingClientRect().width + gap;
     };
 
-    prev.addEventListener('click', () => track.scrollBy({ left: -getCardWidth(), behavior: 'smooth' }));
-    next.addEventListener('click', () => track.scrollBy({ left: getCardWidth(), behavior: 'smooth' }));
+    prev.addEventListener('click', () => {
+      track.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
+    });
+
+    next.addEventListener('click', () => {
+      track.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
+    });
   });
 
-  /* =========================
-     MODAL
-  ========================= */
+  /* =========================================================
+     МОДАЛЬНОЕ ОКНО НОМЕРА
+
+     В модалке остался один экран: фотография и информация.
+     Отдельная внутренняя страница галереи больше не используется.
+  ========================================================= */
   const modal = document.querySelector('[data-room-modal]');
   if (!modal) return;
 
+  /*
+    Переносим модалку в body.
+    Иначе stacking context секции rooms не позволяет ей подняться
+    выше фиксированного хедера даже при большом z-index.
+  */
+  document.body.appendChild(modal);
+
   const modalTitle = modal.querySelector('[data-room-modal-title]');
-  const modalPriceEls = modal.querySelectorAll('[data-room-modal-price]');
-  const modalTrack = modal.querySelector('[data-room-modal-track]');
-  const dotsEls = modal.querySelectorAll('[data-room-modal-dots]');
-  const modalPrevBtns = modal.querySelectorAll('[data-room-modal-prev]');
-  const modalNextBtns = modal.querySelectorAll('[data-room-modal-next]');
-  const closeEls = modal.querySelectorAll('[data-room-modal-close]');
-
-  const pageDetails = modal.querySelector('[data-room-modal-page="details"]');
-  const pageGallery = modal.querySelector('[data-room-modal-page="gallery"]');
-
+  const modalPrice = modal.querySelector('[data-room-modal-price]');
+  const mediaBox = modal.querySelector('.room-modal__detailsMedia');
   const heroImg = modal.querySelector('[data-room-modal-hero-img]');
+  const heroIncoming = modal.querySelector('[data-room-modal-hero-incoming]');
+  const counter = modal.querySelector('[data-room-modal-counter]');
   const metaBox = modal.querySelector('[data-room-modal-meta]');
   const descBox = modal.querySelector('[data-room-modal-desc]');
+  const dotsBox = modal.querySelector('[data-room-modal-dots]');
+  const prevButton = modal.querySelector('[data-room-modal-prev]');
+  const nextButton = modal.querySelector('[data-room-modal-next]');
+  const closeElements = modal.querySelectorAll('[data-room-modal-close]');
+  const galleryLink = modal.querySelector('.room-modal__galleryLink');
 
-  const btnOpenGallery = modal.querySelector('[data-room-modal-open-gallery]');
-  const btnBackDetails = modal.querySelector('[data-room-modal-back-details]');
+  /* Полноэкранный просмотр текущей фотографии по нажатию на неё. */
+  const fullscreen = modal.querySelector('[data-room-fs]');
+  const fullscreenStage = modal.querySelector('[data-room-fs-stage]');
+  const fullscreenImg = modal.querySelector('[data-room-fs-img]');
+  const fullscreenIncoming = modal.querySelector('[data-room-fs-incoming]');
+  const fullscreenCloseElements = modal.querySelectorAll('[data-room-fs-close]');
+  const fullscreenPrev = modal.querySelector('[data-room-fs-prev]');
+  const fullscreenNext = modal.querySelector('[data-room-fs-next]');
 
-  // fullscreen
-  const fs = modal.querySelector('[data-room-fs]');
-  const fsImg = modal.querySelector('[data-room-fs-img]');
-  const fsCloseEls = modal.querySelectorAll('[data-room-fs-close]');
-  const fsPrev = modal.querySelector('[data-room-fs-prev]');
-  const fsNext = modal.querySelector('[data-room-fs-next]');
-
-  let slides = [];
+  let images = [];
   let activeIndex = 0;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchDeltaX = 0;
+  let isHorizontalSwipe = false;
+  let suppressImageClick = false;
+  let hasRenderedImage = false;
+  let imageTransitionId = 0;
+  let fullscreenTransitionId = 0;
+  let fullscreenTouchStartX = 0;
+  let fullscreenTouchStartY = 0;
+  let fullscreenTouchDeltaX = 0;
+  let isFullscreenHorizontalSwipe = false;
+  let fullscreenScale = 1;
+  let fullscreenPanX = 0;
+  let fullscreenPanY = 0;
+  let fullscreenPinchStartDistance = 0;
+  let fullscreenPinchStartScale = 1;
+  let fullscreenPanStartX = 0;
+  let fullscreenPanStartY = 0;
+  let fullscreenPanOriginX = 0;
+  let fullscreenPanOriginY = 0;
+  let fullscreenIsPinching = false;
+  let fullscreenIsPanning = false;
+  let fullscreenGestureMoved = false;
+  let fullscreenLastTap = 0;
 
-  // autoplay only in gallery
-  const AUTOPLAY_MS = 1000;
-  const RESUME_IDLE_MS = 1500;
-  let autoplayInterval = null;
-  let resumeTimeout = null;
-  let userPaused = false;
+  const isModalOpen = () => modal.classList.contains('is-open');
+  const isFullscreenOpen = () => {
+    return Boolean(fullscreen && fullscreen.classList.contains('is-open'));
+  };
 
-  const isOpen = () => modal.classList.contains('is-open');
-  const isFsOpen = () => fs && fs.classList.contains('is-open');
-  const isGalleryMode = () => pageGallery && pageGallery.classList.contains('is-active');
+  const nextIndex = () => (activeIndex + 1) % Math.max(1, images.length);
+  const prevIndex = () => (activeIndex - 1 + images.length) % Math.max(1, images.length);
 
-  const stopAutoplay = (clearResumeTimer) => {
-    if (autoplayInterval) {
-      window.clearInterval(autoplayInterval);
-      autoplayInterval = null;
+  const renderDots = () => {
+    if (!dotsBox) return;
+    dotsBox.innerHTML = '';
+
+    images.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = `room-modal__dot${index === activeIndex ? ' is-active' : ''}`;
+      dot.setAttribute('aria-label', `Показать фото ${index + 1}`);
+      dot.addEventListener('click', () => showImage(index));
+      dotsBox.appendChild(dot);
+    });
+  };
+
+  const updateActiveDot = () => {
+    if (!dotsBox) return;
+
+    dotsBox.querySelectorAll('.room-modal__dot').forEach((dot, index) => {
+      dot.classList.toggle('is-active', index === activeIndex);
+    });
+  };
+
+  const updateCounter = () => {
+    if (!counter) return;
+    counter.textContent = `${activeIndex + 1} / ${Math.max(1, images.length)}`;
+  };
+
+  /*
+    Настоящий crossfade: новый кадр проявляется вторым слоем поверх старого.
+    После завершения основной слой обновляется незаметно.
+  */
+  const crossfadeImage = (main, incoming, src, transitionId, getCurrentId) => {
+    if (!main || !incoming || !src) return;
+
+    const loader = new Image();
+    loader.src = src;
+
+    const reveal = () => {
+      if (transitionId !== getCurrentId()) return;
+
+      /*
+        Сначала мгновенно прячем служебный слой, затем проявляем его
+        в следующем кадре. Это сохраняет crossfade даже при быстрых свайпах.
+      */
+      incoming.classList.add('no-transition');
+      incoming.classList.remove('is-visible');
+      incoming.src = src;
+
+      window.requestAnimationFrame(() => {
+        incoming.classList.remove('no-transition');
+
+        window.requestAnimationFrame(() => {
+          if (transitionId !== getCurrentId()) return;
+          incoming.classList.add('is-visible');
+
+          window.setTimeout(() => {
+            if (transitionId !== getCurrentId()) return;
+
+            main.src = src;
+            incoming.classList.add('no-transition');
+            incoming.classList.remove('is-visible');
+
+            window.requestAnimationFrame(() => {
+              incoming.classList.remove('no-transition');
+            });
+          }, 260);
+        });
+      });
+    };
+
+    if (loader.complete) {
+      reveal();
+    } else {
+      loader.onload = reveal;
+      loader.onerror = reveal;
     }
-    if (clearResumeTimer) {
-      window.clearTimeout(resumeTimeout);
-      resumeTimeout = null;
-    }
   };
 
-  const markUserInteraction = () => {
-    userPaused = true;
-    stopAutoplay(false);
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-    window.clearTimeout(resumeTimeout);
-    resumeTimeout = window.setTimeout(() => {
-      userPaused = false;
-      if (isOpen() && isGalleryMode()) startAutoplay();
-    }, RESUME_IDLE_MS);
+  const applyFullscreenZoom = () => {
+    if (!fullscreenStage) return;
+
+    fullscreenStage.style.transform =
+      `translate3d(${fullscreenPanX}px, ${fullscreenPanY}px, 0) ` +
+      `scale(${fullscreenScale})`;
+
+    fullscreen.classList.toggle('is-zoomed', fullscreenScale > 1.01);
   };
 
-  const startAutoplay = () => {
-    if (!isGalleryMode()) return;
-    if (autoplayInterval || slides.length <= 1) return;
-    if (userPaused) return;
-
-    autoplayInterval = window.setInterval(() => {
-      if (!isOpen() || !isGalleryMode()) return;
-      scrollToIndex(nextIndex(), 'smooth');
-    }, AUTOPLAY_MS);
+  const resetFullscreenZoom = () => {
+    fullscreenScale = 1;
+    fullscreenPanX = 0;
+    fullscreenPanY = 0;
+    applyFullscreenZoom();
   };
 
-  const showDetails = () => {
-    pageGallery?.classList.remove('is-active');
-    pageDetails?.classList.add('is-active');
-    stopAutoplay(false);
-
-    // чтобы не "торчал край" галереи
-    if (modalTrack) {
-      modalTrack.style.pointerEvents = 'none';
-      modalTrack.style.overflowX = 'hidden';
-      modalTrack.scrollLeft = 0;
-    }
+  const clampFullscreenPan = () => {
+    const maxX = (window.innerWidth * (fullscreenScale - 1)) / 2;
+    const maxY = (window.innerHeight * (fullscreenScale - 1)) / 2;
+    fullscreenPanX = clamp(fullscreenPanX, -maxX, maxX);
+    fullscreenPanY = clamp(fullscreenPanY, -maxY, maxY);
   };
 
-  const showGallery = () => {
-    pageDetails?.classList.remove('is-active');
-    pageGallery?.classList.add('is-active');
+  const touchDistance = (first, second) => {
+    return Math.hypot(
+      second.clientX - first.clientX,
+      second.clientY - first.clientY
+    );
+  };
 
-    if (modalTrack) {
-      modalTrack.style.pointerEvents = '';
-      modalTrack.style.overflowX = 'auto';
+  const renderFullscreenImage = () => {
+    if (!fullscreenImg || !images[activeIndex]) return;
+
+    resetFullscreenZoom();
+
+    if (!fullscreenImg.getAttribute('src')) {
+      fullscreenImg.src = images[activeIndex];
+      return;
     }
 
-    if (isOpen()) startAutoplay();
+    const transitionId = ++fullscreenTransitionId;
+    crossfadeImage(
+      fullscreenImg,
+      fullscreenIncoming,
+      images[activeIndex],
+      transitionId,
+      () => fullscreenTransitionId
+    );
   };
 
-  btnOpenGallery?.addEventListener('click', showGallery);
-  btnBackDetails?.addEventListener('click', showDetails);
+  const showImage = (index) => {
+    if (!images[index]) return;
+
+    activeIndex = index;
+    if (heroImg) {
+      if (!hasRenderedImage) {
+        heroImg.src = images[activeIndex];
+        hasRenderedImage = true;
+      } else {
+        const transitionId = ++imageTransitionId;
+        crossfadeImage(
+          heroImg,
+          heroIncoming,
+          images[activeIndex],
+          transitionId,
+          () => imageTransitionId
+        );
+      }
+    }
+    updateActiveDot();
+    updateCounter();
+
+    if (isFullscreenOpen()) renderFullscreenImage();
+  };
+
+  const openFullscreen = () => {
+    if (!fullscreen || !fullscreenImg || !images.length) return;
+
+    renderFullscreenImage();
+    fullscreen.classList.add('is-open');
+    fullscreen.setAttribute('aria-hidden', 'false');
+    resetFullscreenZoom();
+  };
+
+  const closeFullscreen = () => {
+    if (!fullscreen || !fullscreenImg) return;
+
+    fullscreen.classList.remove('is-open');
+    fullscreen.setAttribute('aria-hidden', 'true');
+    fullscreenImg.src = '';
+    if (fullscreenIncoming) {
+      fullscreenIncoming.src = '';
+      fullscreenIncoming.classList.remove('is-visible', 'no-transition');
+    }
+    resetFullscreenZoom();
+  };
 
   const openModal = () => {
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
-    showDetails();
-  };
 
-  const closeFullscreen = () => {
-    if (!fs || !fsImg) return;
-    fs.classList.remove('is-open');
-    fs.setAttribute('aria-hidden', 'true');
-    fsImg.src = '';
+    /*
+      На мобильном браузере скролл панели всегда начинается сверху,
+      поэтому название и кнопка закрытия сразу видны.
+    */
+    const scrollArea = modal.querySelector('.room-modal__page--details');
+    if (scrollArea) scrollArea.scrollTop = 0;
   };
 
   const closeModal = () => {
-    stopAutoplay(true);
     closeFullscreen();
-
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
 
-    if (modalTrack) modalTrack.innerHTML = '';
-    dotsEls.forEach((d) => (d.innerHTML = ''));
-
-    slides = [];
+    images = [];
     activeIndex = 0;
-    userPaused = false;
+    hasRenderedImage = false;
+    imageTransitionId += 1;
+    fullscreenTransitionId += 1;
 
     if (heroImg) heroImg.src = '';
+    if (heroIncoming) {
+      heroIncoming.src = '';
+      heroIncoming.classList.remove('is-visible', 'no-transition');
+    }
     if (metaBox) metaBox.innerHTML = '';
     if (descBox) descBox.innerHTML = '';
+    if (dotsBox) dotsBox.innerHTML = '';
   };
 
-  const renderFs = () => {
-    if (!fs || !fsImg) return;
-    const imgEl = slides[activeIndex]?.querySelector('img') || heroImg;
-    if (!imgEl) return;
-    fsImg.src = imgEl.src;
-  };
+  const fillModal = ({ title, price, metaHtml, descHtml, imageList }) => {
+    images = imageList;
+    activeIndex = 0;
+    hasRenderedImage = false;
 
-  const openFullscreen = () => {
-    if (!fs || !fsImg) return;
-    fs.classList.add('is-open');
-    fs.setAttribute('aria-hidden', 'false');
-    renderFs();
-  };
-
-  fsCloseEls.forEach((el) => el.addEventListener('click', closeFullscreen));
-
-  const buildDots = (count) => {
-    dotsEls.forEach((wrap) => {
-      wrap.innerHTML = '';
-      for (let i = 0; i < count; i++) {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'room-modal__dot' + (i === 0 ? ' is-active' : '');
-        dot.addEventListener('click', () => {
-          markUserInteraction();
-          scrollToIndex(i);
-        });
-        wrap.appendChild(dot);
-      }
+    /* Заранее загружаем кадры, чтобы первый свайп не ждал сеть. */
+    imageList.forEach((src) => {
+      const preload = new Image();
+      preload.src = src;
     });
-  };
 
-  const setActiveDot = (idx) => {
-    dotsEls.forEach((wrap) => {
-      const dots = wrap.querySelectorAll('.room-modal__dot');
-      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-    });
-  };
-
-  const scrollToIndex = (idx, behavior = 'smooth') => {
-    if (!slides[idx]) return;
-    activeIndex = idx;
-    setActiveDot(idx);
-
-    const imgEl = slides[idx].querySelector('img');
-    if (heroImg && imgEl) heroImg.src = imgEl.src;
-
-    if (isGalleryMode() && modalTrack) {
-      modalTrack.scrollTo({ left: slides[idx].offsetLeft, behavior });
-    }
-
-    if (isFsOpen()) renderFs();
-  };
-
-  const nextIndex = () => (activeIndex + 1) % Math.max(1, slides.length);
-  const prevIndex = () => (activeIndex - 1 + slides.length) % Math.max(1, slides.length);
-
-  const rebuildModal = ({ title, price, metaHtml, descHtml, images }) => {
-    modalTitle.textContent = title || 'ROOM';
-    modalPriceEls.forEach((el) => (el.textContent = price || ''));
-
+    if (modalTitle) modalTitle.textContent = title || 'НОМЕР';
+    if (modalPrice) modalPrice.textContent = price || '';
     if (metaBox) metaBox.innerHTML = metaHtml || '';
     if (descBox) descBox.innerHTML = descHtml || '';
 
-    modalTrack.innerHTML = '';
-    slides = [];
-
-    images.forEach((src) => {
-      const slide = document.createElement('div');
-      slide.className = 'room-modal__img';
-      slide.innerHTML = `<img src="${src}" alt="${title || 'Room photo'}">`;
-
-      slide.querySelector('img').addEventListener('click', (e) => {
-        e.stopPropagation();
-        markUserInteraction();
-        openFullscreen();
-      });
-
-      modalTrack.appendChild(slide);
-      slides.push(slide);
-    });
-
-    buildDots(images.length);
-
-    activeIndex = 0;
-    setActiveDot(0);
-
-    if (heroImg) {
-      heroImg.src = images[0] || '';
-      heroImg.onclick = (e) => {
-        e.stopPropagation();
-        markUserInteraction();
-        openFullscreen();
-      };
-    }
-
-    userPaused = false;
-    stopAutoplay(true);
-
-    modalTrack.scrollTo({ left: 0, behavior: 'auto' });
-    showDetails();
+    renderDots();
+    showImage(0);
   };
 
-  // prev/next buttons
-  modalPrevBtns.forEach((btn) => btn.addEventListener('click', () => { markUserInteraction(); scrollToIndex(prevIndex()); }));
-  modalNextBtns.forEach((btn) => btn.addEventListener('click', () => { markUserInteraction(); scrollToIndex(nextIndex()); }));
+  if (prevButton) {
+    prevButton.addEventListener('click', () => showImage(prevIndex()));
+  }
 
-  // fullscreen prev/next
-  fsPrev?.addEventListener('click', () => { markUserInteraction(); scrollToIndex(prevIndex()); renderFs(); });
-  fsNext?.addEventListener('click', () => { markUserInteraction(); scrollToIndex(nextIndex()); renderFs(); });
+  if (nextButton) {
+    nextButton.addEventListener('click', () => showImage(nextIndex()));
+  }
 
-  // close modal
-  closeEls.forEach((el) => el.addEventListener('click', closeModal));
+  if (heroImg) {
+    heroImg.addEventListener('click', () => {
+      if (suppressImageClick) {
+        suppressImageClick = false;
+        return;
+      }
+      openFullscreen();
+    });
+  }
 
-  // open modal from card
+  if (fullscreenPrev) {
+    fullscreenPrev.addEventListener('click', () => showImage(prevIndex()));
+  }
+
+  if (fullscreenNext) {
+    fullscreenNext.addEventListener('click', () => showImage(nextIndex()));
+  }
+
+  /*
+    Жесты полноэкранного просмотра:
+    - один палец при масштабе 1× — перелистывание;
+    - два пальца — pinch-to-zoom до 4×;
+    - один палец при увеличении — перемещение фотографии;
+    - двойной тап — увеличение 2× или сброс.
+  */
+  if (fullscreen) {
+    fullscreen.addEventListener(
+      'touchstart',
+      (event) => {
+        fullscreenGestureMoved = false;
+
+        if (event.touches.length === 2) {
+          fullscreenIsPinching = true;
+          fullscreenIsPanning = false;
+          fullscreenPinchStartDistance = touchDistance(
+            event.touches[0],
+            event.touches[1]
+          );
+          fullscreenPinchStartScale = fullscreenScale;
+          return;
+        }
+
+        const touch = event.touches[0];
+        if (!touch) return;
+        fullscreenTouchStartX = touch.clientX;
+        fullscreenTouchStartY = touch.clientY;
+        fullscreenTouchDeltaX = 0;
+        isFullscreenHorizontalSwipe = false;
+
+        if (fullscreenScale > 1.01) {
+          fullscreenIsPanning = true;
+          fullscreenPanStartX = touch.clientX;
+          fullscreenPanStartY = touch.clientY;
+          fullscreenPanOriginX = fullscreenPanX;
+          fullscreenPanOriginY = fullscreenPanY;
+        }
+      },
+      { passive: false }
+    );
+
+    fullscreen.addEventListener(
+      'touchmove',
+      (event) => {
+        if (event.touches.length === 2 && fullscreenIsPinching) {
+          const distance = touchDistance(event.touches[0], event.touches[1]);
+          const ratio = distance / Math.max(1, fullscreenPinchStartDistance);
+
+          fullscreenScale = clamp(
+            fullscreenPinchStartScale * ratio,
+            1,
+            4
+          );
+          clampFullscreenPan();
+          applyFullscreenZoom();
+          fullscreenGestureMoved = true;
+          event.preventDefault();
+          return;
+        }
+
+        const touch = event.touches[0];
+        if (!touch) return;
+
+        if (fullscreenScale > 1.01 && fullscreenIsPanning) {
+          fullscreenPanX =
+            fullscreenPanOriginX + touch.clientX - fullscreenPanStartX;
+          fullscreenPanY =
+            fullscreenPanOriginY + touch.clientY - fullscreenPanStartY;
+          clampFullscreenPan();
+          applyFullscreenZoom();
+          fullscreenGestureMoved = true;
+          event.preventDefault();
+          return;
+        }
+
+        const deltaX = touch.clientX - fullscreenTouchStartX;
+        const deltaY = touch.clientY - fullscreenTouchStartY;
+        fullscreenTouchDeltaX = deltaX;
+
+        if (Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY)) {
+          isFullscreenHorizontalSwipe = true;
+          fullscreenGestureMoved = true;
+          event.preventDefault();
+        }
+      },
+      { passive: false }
+    );
+
+    fullscreen.addEventListener('touchend', (event) => {
+      if (event.touches.length > 0) return;
+
+      if (
+        fullscreenScale <= 1.01 &&
+        isFullscreenHorizontalSwipe &&
+        Math.abs(fullscreenTouchDeltaX) >= 46
+      ) {
+        if (fullscreenTouchDeltaX < 0) {
+          showImage(nextIndex());
+        } else {
+          showImage(prevIndex());
+        }
+      }
+
+      if (!fullscreenGestureMoved && !fullscreenIsPinching) {
+        const now = Date.now();
+
+        if (now - fullscreenLastTap < 300) {
+          if (fullscreenScale > 1.01) {
+            resetFullscreenZoom();
+          } else {
+            fullscreenScale = 2;
+            applyFullscreenZoom();
+          }
+          fullscreenLastTap = 0;
+        } else {
+          fullscreenLastTap = now;
+        }
+      }
+
+      if (fullscreenScale <= 1.01) resetFullscreenZoom();
+
+      fullscreenTouchDeltaX = 0;
+      isFullscreenHorizontalSwipe = false;
+      fullscreenIsPinching = false;
+      fullscreenIsPanning = false;
+      fullscreenGestureMoved = false;
+    });
+
+    fullscreen.addEventListener('touchcancel', () => {
+      fullscreenTouchDeltaX = 0;
+      isFullscreenHorizontalSwipe = false;
+      fullscreenIsPinching = false;
+      fullscreenIsPanning = false;
+      fullscreenGestureMoved = false;
+    });
+  }
+
+  /*
+    Горизонтальный свайп внутри фотоблока.
+    Вертикальный жест остаётся свободным для прокрутки информации.
+  */
+  if (mediaBox) {
+    mediaBox.addEventListener(
+      'touchstart',
+      (event) => {
+        const touch = event.touches[0];
+        if (!touch) return;
+
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchDeltaX = 0;
+        isHorizontalSwipe = false;
+        mediaBox.classList.add('is-touching');
+      },
+      { passive: true }
+    );
+
+    mediaBox.addEventListener(
+      'touchmove',
+      (event) => {
+        const touch = event.touches[0];
+        if (!touch) return;
+
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        touchDeltaX = deltaX;
+
+        if (Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY)) {
+          isHorizontalSwipe = true;
+          event.preventDefault();
+        }
+      },
+      { passive: false }
+    );
+
+    mediaBox.addEventListener('touchend', () => {
+      mediaBox.classList.remove('is-touching');
+
+      if (isHorizontalSwipe && Math.abs(touchDeltaX) >= 46) {
+        suppressImageClick = true;
+
+        if (touchDeltaX < 0) {
+          showImage(nextIndex());
+        } else {
+          showImage(prevIndex());
+        }
+
+        window.setTimeout(() => {
+          suppressImageClick = false;
+        }, 350);
+      }
+
+      touchDeltaX = 0;
+      isHorizontalSwipe = false;
+    });
+
+    mediaBox.addEventListener('touchcancel', () => {
+      mediaBox.classList.remove('is-touching');
+      touchDeltaX = 0;
+      isHorizontalSwipe = false;
+    });
+  }
+  fullscreenCloseElements.forEach((element) => {
+    element.addEventListener('click', closeFullscreen);
+  });
+
+  closeElements.forEach((element) => {
+    element.addEventListener('click', closeModal);
+  });
+
+  /*
+    Общая галерея открывается своим gallery.js.
+    Здесь мы только закрываем модалку номера, чтобы галерея не оказалась
+    под ней и чтобы хедер/скролл вернулись в нормальное состояние.
+  */
+  if (galleryLink) {
+    galleryLink.addEventListener('click', closeModal);
+  }
+
+  /*
+    Escape сначала закрывает полноэкранное фото,
+    а повторное нажатие — саму модалку.
+  */
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+
+    if (isFullscreenOpen()) {
+      closeFullscreen();
+    } else if (isModalOpen()) {
+      closeModal();
+    }
+  });
+
+  /* Открываем модалку по нажатию на карточку номера. */
   document.querySelectorAll('.room-slide[data-images]').forEach((card) => {
     card.addEventListener('click', () => {
+      const nameElement = card.querySelector('.room-name');
+      const priceElement = card.querySelector('.room-price');
+      const metaElement = card.querySelector('.room-meta');
+      const shortDescriptionElement = card.querySelector('.room-desc');
+      const fullDescriptionElement = card.querySelector('.room-desc-full');
+
       const title =
         card.getAttribute('data-room-title') ||
-        card.querySelector('.room-name')?.textContent?.trim() ||
-        'ROOM';
+        (nameElement && nameElement.textContent
+          ? nameElement.textContent.trim()
+          : '') ||
+        'НОМЕР';
 
       const price =
         card.getAttribute('data-room-price') ||
-        card.querySelector('.room-price')?.textContent?.trim() ||
+        (priceElement && priceElement.textContent
+          ? priceElement.textContent.trim()
+          : '') ||
         '';
 
-      const images = (card.getAttribute('data-images') || '')
+      const imageList = (card.getAttribute('data-images') || '')
         .split(',')
-        .map((s) => s.trim())
+        .map((src) => src.trim())
         .filter(Boolean);
-      if (!images.length) return;
 
-      const metaHtml = card.querySelector('.room-meta')?.innerHTML || '';
-      const shortDesc = card.querySelector('.room-desc')?.textContent?.trim() || '';
+      if (!imageList.length) return;
 
-      const fullEl = card.querySelector('.room-desc-full');
-      const fullHtml = fullEl ? fullEl.innerHTML.trim() : '';
+      const metaHtml = metaElement ? metaElement.innerHTML : '';
+      const shortDescription =
+        shortDescriptionElement && shortDescriptionElement.textContent
+          ? shortDescriptionElement.textContent.trim()
+          : '';
+      const fullDescription = fullDescriptionElement
+        ? fullDescriptionElement.innerHTML.trim()
+        : '';
 
-      const descHtml = fullHtml || shortDesc;
+      fillModal({
+        title,
+        price,
+        metaHtml,
+        descHtml: fullDescription || shortDescription,
+        imageList,
+      });
 
-      rebuildModal({ title, price, metaHtml, descHtml, images });
       openModal();
     });
   });

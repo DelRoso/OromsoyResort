@@ -1,60 +1,258 @@
 {% load static %}
 
 <section id="activities" class="section activities">
-  <div class="activities-grid">
+  <div class="container activities-shell">
+    <header class="activities-head">
+      <span class="activities-kicker">Активности</span>
+      <h2>Чем заняться в горах</h2>
+      <p>
+        Выберите настроение дня — от прогулок по горным маршрутам
+        до спокойного отдыха на территории Oromsoy.
+      </p>
+    </header>
 
-    <!-- LEFT: edge-to-edge carousel -->
-    <div class="activities-left" aria-label="Activities gallery" data-activities>
-      <div class="activities-carousel" data-activities-track>
-        <!-- добавляй сколько угодно -->
-        <div class="activities-slide is-active">
-          <img src="{% static 'images/rooms/test.n1.jpg' %}" alt="Activity 1" loading="lazy">
+    <!--
+      Каждая карточка хранит данные для общей модалки:
+      data-activity-images — фотографии через запятую;
+      скрытый .activity-card__description — текст и список преимуществ.
+      Фотографии позже можно заменить без изменения JavaScript.
+    -->
+    <div class="activities-mosaic">
+      <button
+        class="activity-card activity-card--wide"
+        type="button"
+        data-activity-card
+        data-activity-title="Экскурсии"
+        data-activity-category="Открывайте новое"
+        data-activity-images="/static/images/background/back-pole.JPG,/static/images/background/back-tree.jpg,/static/images/background/back-autum.jpg"
+      >
+        <img src="{% static 'images/background/back-pole.JPG' %}" alt="Экскурсии по окрестностям Чимгана" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>Открывайте новое</small>
+          <strong>Экскурсии</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Познакомьтесь с самыми красивыми местами Чимгана, Бельдерсая и Амирсая. Мы поможем подобрать маршрут под ваш темп, сезон и состав компании.</p>
+          <ul>
+            <li>Маршруты для семей и компаний</li>
+            <li>Живописные остановки для фотографий</li>
+            <li>Рекомендации по времени и экипировке</li>
+          </ul>
+        </template>
+      </button>
+
+      <button
+        class="activity-card activity-card--narrow"
+        type="button"
+        data-activity-card
+        data-activity-title="Треккинг и походы"
+        data-activity-category="Активный отдых"
+        data-activity-images="/static/images/background/back-tuchi.JPG,/static/images/background/back-pole.JPG,/static/images/background/back-autum.jpg"
+      >
+        <img src="{% static 'images/background/back-tuchi.JPG' %}" alt="Треккинг и походы в горах" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>Активный отдых</small>
+          <strong>Треккинг и походы</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Горные тропы, чистый воздух и панорамные виды. Выбирайте лёгкую прогулку или более насыщенный маршрут на несколько часов.</p>
+          <ul>
+            <li>Маршруты разного уровня сложности</li>
+            <li>Лучшие сезоны — весна, лето и осень</li>
+            <li>Подходит для индивидуальных прогулок и групп</li>
+          </ul>
+        </template>
+      </button>
+
+      <button
+        class="activity-card activity-card--narrow"
+        type="button"
+        data-activity-card
+        data-activity-title="Бассейн"
+        data-activity-category="У воды"
+        data-activity-images="/static/images/background/color.jpg,/static/images/background/back-tree.jpg,/static/images/background/back1234.jpg"
+      >
+        <img src="{% static 'images/background/color.jpg' %}" alt="Отдых у бассейна" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>У воды</small>
+          <strong>Бассейн</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Спокойный отдых у воды с видом на зелёную территорию и горы. Идеальное место, чтобы освежиться и провести неспешный день.</p>
+          <ul>
+            <li>Зона отдыха рядом с водой</li>
+            <li>Подходит взрослым и семьям</li>
+            <li>Особенно приятно в тёплый сезон</li>
+          </ul>
+        </template>
+      </button>
+
+      <button
+        class="activity-card activity-card--wide"
+        type="button"
+        data-activity-card
+        data-activity-title="Закаты"
+        data-activity-category="Тихие вечера"
+        data-activity-images="/static/images/background/back1234.jpg,/static/images/background/back-autum.jpg,/static/images/background/back-tree.jpg"
+      >
+        <img src="{% static 'images/background/back1234.jpg' %}" alt="Закат над Oromsoy Resort" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>Тихие вечера</small>
+          <strong>Закаты</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Вечером горы меняют цвет, а небо становится главным событием дня. Найдите любимую точку на территории и просто наблюдайте.</p>
+          <ul>
+            <li>Панорамные виды с территории</li>
+            <li>Атмосфера для романтического вечера</li>
+            <li>Красивые кадры в золотой час</li>
+          </ul>
+        </template>
+      </button>
+
+      <button
+        class="activity-card activity-card--wide"
+        type="button"
+        data-activity-card
+        data-activity-title="Пруд с кои"
+        data-activity-category="Природа"
+        data-activity-images="/static/images/background/color.jpg,/static/images/background/rewiewback1.jpg,/static/images/background/back-tree.jpg"
+      >
+        <img src="{% static 'images/background/color.jpg' %}" alt="Пруд с карпами кои на территории" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>Природа</small>
+          <strong>Пруд с кои</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Небольшой живой уголок для тихих пауз и наблюдения за карпами кои. Здесь особенно приятно замедлиться и отвлечься от суеты.</p>
+          <ul>
+            <li>Спокойная атмосфера сада</li>
+            <li>Любимое место детей</li>
+            <li>Красивый уголок для фотографий</li>
+          </ul>
+        </template>
+      </button>
+
+      <button
+        class="activity-card activity-card--narrow"
+        type="button"
+        data-activity-card
+        data-activity-title="Барбекю и мангальная зона"
+        data-activity-category="Вечера вместе"
+        data-activity-images="/static/images/restaurant/restaurant11.JPG,/static/images/restaurant/restaurant14.JPG,/static/images/restaurant/restaurant18.JPG"
+      >
+        <img src="{% static 'images/restaurant/restaurant11.JPG' %}" alt="Барбекю и мангальная зона" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>Вечера вместе</small>
+          <strong>Барбекю и мангальная зона</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Соберите близких за большим столом и проведите вечер у огня. Мангальная зона подходит для семейных встреч и дружеских компаний.</p>
+          <ul>
+            <li>Пространство для компании</li>
+            <li>Уютная вечерняя атмосфера</li>
+            <li>Возможность организовать особый ужин</li>
+          </ul>
+        </template>
+      </button>
+
+      <button
+        class="activity-card activity-card--narrow"
+        type="button"
+        data-activity-card
+        data-activity-title="Релакс-зона"
+        data-activity-category="Перезагрузка"
+        data-activity-images="/static/images/restaurant/restaurant14.JPG,/static/images/restaurant/restaurant18.JPG,/static/images/background/back-tree.jpg"
+      >
+        <img src="{% static 'images/restaurant/restaurant14.JPG' %}" alt="Уютная релакс-зона Oromsoy Resort" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>Перезагрузка</small>
+          <strong>Релакс-зона</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Место для чтения, разговоров и отдыха после активного дня. Мягкий свет и спокойная обстановка помогают полностью переключиться.</p>
+          <ul>
+            <li>Комфортное пространство для отдыха</li>
+            <li>Тихая атмосфера</li>
+            <li>Подходит для вечера в любую погоду</li>
+          </ul>
+        </template>
+      </button>
+
+      <button
+        class="activity-card activity-card--wide"
+        type="button"
+        data-activity-card
+        data-activity-title="Развлечения"
+        data-activity-category="Для всей компании"
+        data-activity-images="/static/images/background/rooms.JPG,/static/images/background/back-tree.jpg,/static/images/restaurant/restaurant18.JPG"
+      >
+        <img src="{% static 'images/background/rooms.JPG' %}" alt="Развлечения для гостей Oromsoy Resort" loading="lazy">
+        <span class="activity-card__shade"></span>
+        <span class="activity-card__content">
+          <small>Для всей компании</small>
+          <strong>Развлечения</strong>
+        </span>
+        <span class="activity-card__arrow" aria-hidden="true">↗</span>
+        <template data-activity-description>
+          <p>Проводите время вместе: настольные игры, активные занятия на территории и уютные вечера для гостей разных возрастов.</p>
+          <ul>
+            <li>Семейный формат отдыха</li>
+            <li>Занятия для детей и взрослых</li>
+            <li>Варианты для хорошей и прохладной погоды</li>
+          </ul>
+        </template>
+      </button>
+    </div>
+  </div>
+
+  <!-- Одна общая модалка наполняется данными выбранной карточки. -->
+  <div class="activity-modal" data-activity-modal aria-hidden="true">
+    <div class="activity-modal__backdrop" data-activity-modal-close></div>
+
+    <div class="activity-modal__panel" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
+      <header class="activity-modal__top">
+        <div>
+          <span class="activity-modal__category" data-activity-modal-category>Активность</span>
+          <h3 id="activityModalTitle" data-activity-modal-title>Активность</h3>
         </div>
-        <div class="activities-slide">
-          <img src="{% static 'images/rooms/amirsoy1.jpg' %}" alt="Activity 2" loading="lazy">
+        <button class="activity-modal__close" type="button" aria-label="Закрыть" data-activity-modal-close>
+          <span>Закрыть</span>
+          <b aria-hidden="true">✕</b>
+        </button>
+      </header>
+
+      <div class="activity-modal__body">
+        <div class="activity-modal__gallery" data-activity-gallery>
+          <div class="activity-modal__imageStage">
+            <img data-activity-modal-image alt="">
+            <img class="activity-modal__image--incoming" data-activity-modal-image-incoming alt="">
+          </div>
+          <button class="activity-modal__nav activity-modal__nav--prev" type="button" aria-label="Предыдущее фото" data-activity-prev>‹</button>
+          <button class="activity-modal__nav activity-modal__nav--next" type="button" aria-label="Следующее фото" data-activity-next>›</button>
+          <div class="activity-modal__counter" data-activity-counter>1 / 1</div>
+          <div class="activity-modal__dots" data-activity-dots></div>
         </div>
-        <div class="activities-slide">
-          <img src="{% static 'images/rooms/amirsoy2.jpg' %}" alt="Activity 3" loading="lazy">
+
+        <div class="activity-modal__info">
+          <div class="activity-modal__description" data-activity-modal-description></div>
+          <a class="btn-primary activity-modal__book" href="#contacts">Узнать подробнее</a>
         </div>
       </div>
-
-      <!-- точки -->
-      <div class="activities-dots" data-activities-dots aria-hidden="false"></div>
-
-      <!-- стрелки (по умолчанию скрыты в css как и в about) -->
-      <button class="activities-arrow activities-arrow--left" type="button" aria-label="Previous" data-activities-prev>‹</button>
-      <button class="activities-arrow activities-arrow--right" type="button" aria-label="Next" data-activities-next>›</button>
     </div>
-
-    <!-- RIGHT: content inside container -->
-    <div class="activities-right">
-      <div class="container">
-        <div class="activities-content">
-          <span class="activities-line"></span>
-
-          <h2 class="activities-title">
-            RESORT <span class="activities-accent">ACTIVITIES</span><br>
-            ALL YEAR ROUND
-          </h2>
-
-          <p class="activities-lead">
-            From snowy adventures to calm nature walks — choose your vibe and enjoy every moment.
-          </p>
-
-          <p class="activities-text">
-            Discover a curated list of experiences for couples, families, and adventure lovers.
-            Skiing, snowboarding, hiking, ATV rides, sauna rituals, and cozy evenings with mountain views.
-          </p>
-
-          <p class="activities-text">
-            We update activities by season to keep it fresh: winter sports in cold months,
-            scenic trekking and outdoor fun in warm months — always with comfort and safety.
-          </p>
-
-          <a class="btn-primary activities-btn" href="#contacts">BOOK NOW</a>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>

@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   color: #fff;
-  background: url("../images/background/back-elka.JPG ") center / cover no-repeat;
+  background: url("../images/background/back-elka.JPG") center / cover no-repeat;
 }
 
 /* Hero — затемнение поверх фонового изображения */
@@ -176,13 +176,68 @@
   gap: 1px;
 }
 
-.social img {
+.social a {
+  position: relative;
   width: 50px;
+  height: 34px;
+  display: block;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+}
+
+.social img {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 50px;
+  max-width: none;
   opacity: 0.8;
+  transform: translateY(-50%);
   transition: opacity 0.25s ease;
 }
 
 .social img:hover {
+  opacity: 1;
+}
+
+.social a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: #ffd700;
+  transition: opacity 0.25s ease;
+}
+
+.social a:nth-child(1)::after {
+  -webkit-mask: url("../images/icons/insta.png") center / 50px auto no-repeat;
+  mask: url("../images/icons/insta.png") center / 50px auto no-repeat;
+}
+
+.social a:nth-child(2)::after {
+  -webkit-mask: url("../images/icons/face.png") center / 50px auto no-repeat;
+  mask: url("../images/icons/face.png") center / 50px auto no-repeat;
+}
+
+.social a:nth-child(3)::after {
+  -webkit-mask: url("../images/icons/treds.png") center / 50px auto no-repeat;
+  mask: url("../images/icons/treds.png") center / 50px auto no-repeat;
+}
+
+.social a:nth-child(4)::after {
+  -webkit-mask: url("../images/icons/telega.png") center / 50px auto no-repeat;
+  mask: url("../images/icons/telega.png") center / 50px auto no-repeat;
+}
+
+.social a:hover {
+  transform: translateY(-2px);
+}
+
+.social a:hover img {
+  opacity: 0;
+}
+
+.social a:hover::after {
   opacity: 1;
 }
 

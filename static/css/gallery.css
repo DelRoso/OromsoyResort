@@ -3,10 +3,16 @@
   overflow: hidden;
 }
 
+/* Общая галерея всегда находится выше фиксированного хедера. */
+body.site-gallery-opened .site-header {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .site-gallery-modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 2147483050;
   display: none;
   padding: 28px;
 }

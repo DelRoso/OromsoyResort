@@ -426,13 +426,15 @@
       <div class="room-modal__backdrop" data-room-modal-close></div>
 
       <div class="room-modal__panel" role="dialog" aria-modal="true" aria-label="Room modal">
-        <button class="room-modal__close" type="button" aria-label="Close" data-room-modal-close>✕</button>
-
         <div class="room-modal__top">
           <div class="room-modal__title" data-room-modal-title>ROOM</div>
+          <button class="room-modal__close" type="button" aria-label="Закрыть окно" data-room-modal-close>
+            <span class="room-modal__closeText">Закрыть</span>
+            <span aria-hidden="true">✕</span>
+          </button>
         </div>
 
-        <!-- PAGE 1: DETAILS (split) -->
+        <!-- Единственный экран модалки: фото и полная информация о номере -->
         <div class="room-modal__page room-modal__page--details is-active" data-room-modal-page="details">
           <div class="room-modal__details">
 
@@ -440,11 +442,15 @@
             <div class="room-modal__detailsMedia">
               <div class="room-modal__hero">
                 <img class="room-modal__heroImg" data-room-modal-hero-img alt="Room photo">
+                <img class="room-modal__heroImg room-modal__heroImg--incoming" data-room-modal-hero-incoming alt="">
               </div>
 
+              <!-- Счётчик текущего кадра: 1 / 6 -->
+              <div class="room-modal__counter" data-room-modal-counter aria-live="polite">1 / 1</div>
+
               <div class="room-modal__detailsNav">
-                <button class="room-modal__arrow room-modal__arrow--left" type="button" aria-label="Previous" data-room-modal-prev>‹</button>
-                <button class="room-modal__arrow room-modal__arrow--right" type="button" aria-label="Next" data-room-modal-next>›</button>
+                <button class="room-modal__arrow room-modal__arrow--left" type="button" aria-label="Предыдущее фото" data-room-modal-prev>‹</button>
+                <button class="room-modal__arrow room-modal__arrow--right" type="button" aria-label="Следующее фото" data-room-modal-next>›</button>
               </div>
 
               <div class="room-modal__dots room-modal__dots--details" data-room-modal-dots></div>
@@ -456,32 +462,25 @@
               <div class="room-modal__meta" data-room-modal-meta></div>
               <div class="room-modal__descFull" data-room-modal-desc></div>
 
+              <!--
+                Переход в общую галерею сайта.
+                Это не возвращает удалённую внутреннюю страницу VIEW PHOTOS:
+                кнопка использует единый компонент gallery.html.
+              -->
               <div class="room-modal__actions">
-                <button class="btn-ghost room-modal__btnPhotos" type="button" data-room-modal-open-gallery>
+                <button
+                  class="btn-ghost room-modal__galleryLink"
+                  type="button"
+                  data-site-gallery-open
+                  data-site-gallery-section="all"
+                  data-site-gallery-index="0"
+                >
                   VIEW PHOTOS
                 </button>
               </div>
             </div>
 
           </div>
-        </div>
-
-        <!-- PAGE 2+: GALLERY -->
-        <div class="room-modal__page room-modal__page--gallery" data-room-modal-page="gallery">
-          <div class="room-modal__slider room-modal__slider--gallery">
-            <button class="room-modal__arrow room-modal__arrow--left" type="button" aria-label="Previous" data-room-modal-prev>‹</button>
-
-            <div class="room-modal__track" data-room-modal-track></div>
-
-            <button class="room-modal__arrow room-modal__arrow--right" type="button" aria-label="Next" data-room-modal-next>›</button>
-          </div>
-
-          <div class="room-modal__bottom">
-            <div class="room-modal__priceBottom" data-room-modal-price></div>
-            <div class="room-modal__dots" data-room-modal-dots></div>
-          </div>
-
-          <button class="room-modal__backToDetails" type="button" data-room-modal-back-details>← DETAILS</button>
         </div>
       </div>
 
@@ -490,7 +489,11 @@
         <div class="room-fs__backdrop" data-room-fs-close></div>
         <button class="room-fs__close" type="button" aria-label="Close" data-room-fs-close>✕</button>
         <button class="room-fs__arrow room-fs__arrow--left" type="button" aria-label="Previous" data-room-fs-prev>‹</button>
-        <img class="room-fs__img" data-room-fs-img alt="Room photo">
+        <div class="room-fs__stage" data-room-fs-stage>
+          <img class="room-fs__img" data-room-fs-img alt="Room photo">
+          <img class="room-fs__img room-fs__img--incoming" data-room-fs-incoming alt="">
+        </div>
+        <div class="room-fs__hint">Сведите пальцы для масштаба · двойной тап — сброс</div>
         <button class="room-fs__arrow room-fs__arrow--right" type="button" aria-label="Next" data-room-fs-next>›</button>
       </div>
     </div>

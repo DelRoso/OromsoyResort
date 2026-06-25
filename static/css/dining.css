@@ -442,7 +442,11 @@
 
   .dining-showcase__photos {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 235px 160px 185px;
+    /*
+      На планшете показываем все пять фотоблоков:
+      главное фото занимает всю ширину, остальные идут парами.
+    */
+    grid-template-rows: 235px 170px 170px;
   }
 
   .dining-showcase__photo--main {
@@ -461,11 +465,13 @@
   }
 
   .dining-showcase__photo--breakfast {
-    display: none;
+    display: block;
+    grid-column: 1;
+    grid-row: 3;
   }
 
   .dining-showcase__photo--hall {
-    grid-column: 1 / span 2;
+    grid-column: 2;
     grid-row: 3;
   }
 }
@@ -502,13 +508,19 @@
 
   .dining-showcase__photos {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 210px);
+    /*
+      На телефоне каждый фотоблок получает собственный ряд.
+      repeat(5) соответствует пяти figure в restaurant.html.
+    */
+    grid-template-rows: repeat(5, 210px);
   }
 
   .dining-showcase__photo--main,
   .dining-showcase__photo--food,
   .dining-showcase__photo--buffet,
+  .dining-showcase__photo--breakfast,
   .dining-showcase__photo--hall {
+    display: block;
     grid-column: auto;
     grid-row: auto;
   }
