@@ -1,0 +1,919 @@
+/*
+  RESPONSIVE.CSS — финальный слой адаптива.
+
+  Файл подключён последним в head.html, поэтому его правила перекрывают
+  базовые стили отдельных компонентов, не меняя их десктопную версию.
+
+  Breakpoints:
+  1100px — планшеты и небольшие ноутбуки;
+   768px — планшеты в портретной ориентации и крупные телефоны;
+   520px — обычные смартфоны;
+   360px — очень узкие смартфоны.
+*/
+
+/* Общая защита страницы от случайного горизонтального скролла. */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* 320px — минимальная поддерживаемая ширина макета. */
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+/* Элементы формы используют тот же шрифт, что и остальной сайт. */
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+/* =========================================================
+   ПЛАНШЕТЫ И НЕБОЛЬШИЕ ЭКРАНЫ — до 1100px
+   Переводим сложные сетки в более компактный формат.
+========================================================= */
+@media (max-width: 1100px) {
+  /* Универсальные боковые поля, плавно зависящие от ширины экрана. */
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding-inline: clamp(24px, 5vw, 52px);
+  }
+
+  .hero {
+    min-height: 720px;
+    min-height: 100svh;
+    background-position: 58% center;
+  }
+
+  .hero-content {
+    padding-top: 72px;
+  }
+
+  /* Номера: на планшете показываем по две карточки в строке. */
+  .rooms {
+    padding: 82px 0 72px;
+  }
+
+  .rooms-head {
+    margin-bottom: 24px;
+  }
+
+  .rooms-title {
+    gap: 16px;
+  }
+
+  .rooms-track {
+    gap: 22px;
+    padding-inline: 42px;
+    overflow-x: auto;
+    scroll-padding-inline: 42px;
+  }
+
+  .room-slide {
+    flex-basis: calc((100% - 22px) / 2);
+    min-width: 0;
+  }
+
+  .room-frame {
+    width: 100%;
+  }
+
+  .room-frame img {
+    height: clamp(240px, 34vw, 320px);
+  }
+
+  /* About и Activities становятся вертикальными секциями. */
+  .about-grid,
+  .activities-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+  }
+
+  .about-left,
+  .activities-right {
+    padding: 64px 0;
+  }
+
+  .about-content,
+  .activities-content {
+    max-width: 760px;
+  }
+
+  .about-right,
+  .activities-left {
+    height: clamp(360px, 56vw, 540px);
+    min-height: 0;
+  }
+
+  .activities-left {
+    order: 2;
+  }
+
+  .activities-right {
+    order: 1;
+  }
+
+  /* Контакты: карточка идёт сверху, карта — отдельным блоком снизу. */
+  .location-left {
+    padding: 64px 0;
+  }
+
+  .location-card {
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .location-right {
+    height: clamp(360px, 52vw, 500px);
+  }
+
+  /* Галерея: меню категорий переносится в верхнюю строку. */
+  .site-gallery-window {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .site-gallery-menu {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(320px, 1.5fr);
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+  }
+
+  .site-gallery-menu h3 {
+    margin: 4px 0 0;
+    font-size: 22px;
+  }
+
+  .site-gallery-menu nav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .site-gallery-menu nav button {
+    padding: 11px 10px;
+    text-align: center;
+  }
+
+  .site-gallery-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+  }
+}
+
+/* =========================================================
+   МОБИЛЬНЫЙ И ПОРТРЕТНЫЙ ПЛАНШЕТ — до 768px
+   Основной мобильный макет сайта.
+========================================================= */
+@media (max-width: 768px) {
+  /* Общие размеры секций и боковых полей. */
+  .container {
+    padding-inline: 22px;
+  }
+
+  .section {
+    padding: 58px 0;
+  }
+
+  /* ---------- Шапка и полноэкранное мобильное меню ---------- */
+  .header-inner {
+    height: 68px;
+    padding-inline: 20px;
+  }
+
+  .header-inner .logo img,
+  .mobile-menu .logo img {
+    width: 54px;
+  }
+
+  .header-inner .logo,
+  .mobile-menu .logo {
+    gap: 8px;
+    font-size: 13px;
+    letter-spacing: 1.2px;
+  }
+
+  .mobile-menu {
+    /* safe-area не даёт контенту попасть под системную панель iPhone. */
+    padding: 18px 20px max(28px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .mobile-nav {
+    /* Не растягиваем меню до низа — соцсети остаются рядом со ссылками. */
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    margin-top: clamp(38px, 7vh, 64px);
+    gap: clamp(20px, 5vh, 34px);
+  }
+
+  .mobile-nav a {
+    font-size: clamp(16px, 4.8vw, 22px);
+  }
+
+  .mobile-social {
+    position: relative;
+    margin-top: 18px;
+    gap: 14px;
+  }
+
+  /* Декоративный разделитель между ссылками меню и соцсетями. */
+  .mobile-social::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 94px;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.95),
+      transparent
+    );
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.28);
+    transform: translateX(-50%);
+  }
+
+  /* Ссылка остаётся удобной для пальца, но без видимого кружка/фона. */
+  .mobile-social a {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /*
+    Исходные PNG имеют большие прозрачные поля.
+    scale увеличивает сам белый символ внутри картинки,
+    а overflow у ссылки обрезает лишнее прозрачное пространство.
+  */
+  .mobile-social img {
+    width: 42px;
+    max-width: none;
+    height: auto;
+    opacity: 1;
+    transform: scale(1.6);
+  }
+
+  /* ---------- Первый экран ---------- */
+  .hero {
+    min-height: 640px;
+    min-height: 100svh;
+    background-position: 62% center;
+  }
+
+  .hero-content {
+    padding-top: 64px;
+  }
+
+  .hero-content h1 {
+    max-width: 620px;
+    margin-inline: auto;
+    font-size: clamp(36px, 9vw, 54px);
+    line-height: 1.06;
+  }
+
+  .hero-subtitle {
+    max-width: 520px;
+    margin-inline: auto;
+    margin-bottom: 28px;
+    font-size: clamp(15px, 3.5vw, 18px);
+    line-height: 1.6;
+  }
+
+  .hero-buttons {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .hero-buttons a {
+    min-width: 150px;
+  }
+
+  /* ---------- Карточки номеров и горизонтальный свайп ---------- */
+  .rooms {
+    padding: 64px 0 58px;
+  }
+
+  .rooms-head {
+    gap: 22px;
+  }
+
+  .rooms-title {
+    display: block;
+  }
+
+  .rooms-line {
+    display: block;
+    width: 58px;
+    margin: 0 0 18px;
+  }
+
+  .rooms h2 {
+    font-size: clamp(27px, 5.8vw, 38px);
+    line-height: 1.2;
+  }
+
+  .rooms h2 br {
+    display: none;
+  }
+
+  .rooms-head .btn-ghost {
+    min-height: 46px;
+  }
+
+  .rooms-subtitle {
+    font-size: 17px;
+  }
+
+  .rooms-block--second {
+    margin-top: 42px;
+  }
+
+  .rooms-track {
+    gap: 16px;
+    margin-inline: -22px;
+    padding-inline: 22px;
+    padding-block: 14px 28px;
+    scroll-padding-inline: 22px;
+  }
+
+  .room-slide {
+    flex: 0 0 min(78vw, 410px);
+    padding: 12px 12px 22px;
+    border-radius: 24px;
+  }
+
+  .room-frame {
+    width: 100%;
+    border-radius: 17px;
+  }
+
+  .room-frame img {
+    height: clamp(260px, 58vw, 340px);
+  }
+
+  .rooms-arrow {
+    display: none;
+  }
+
+  .room-name {
+    margin-top: 14px;
+  }
+
+  /* ---------- Текстовые секции About и Activities ---------- */
+  .about-left,
+  .activities-right {
+    padding: 58px 0 48px;
+  }
+
+  .about-right,
+  .activities-left {
+    height: clamp(300px, 62vw, 430px);
+  }
+
+  .about-title,
+  .activities-title,
+  .location-title {
+    font-size: clamp(27px, 6vw, 38px);
+    line-height: 1.22;
+  }
+
+  .about-lead,
+  .activities-lead {
+    font-size: 15px;
+  }
+
+  .about-text,
+  .activities-text {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ---------- Ресторан ---------- */
+  .dining-showcase__inner {
+    width: 100%;
+    padding-inline: 22px;
+  }
+
+  .dining-showcase__content {
+    width: 100%;
+  }
+
+  /* ---------- Отзывы и форма отзыва ---------- */
+  .reviews-bg {
+    padding: 58px 0;
+  }
+
+  .reviews-h1 {
+    margin-bottom: 28px;
+    font-size: clamp(32px, 9vw, 52px);
+    line-height: 1.08;
+  }
+
+  .reviews-top-head,
+  .reviews-bottom-head {
+    gap: 10px;
+  }
+
+  .reviews-line {
+    width: 42px;
+  }
+
+  .reviews-subtitle {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-align: center;
+  }
+
+  .reviews-top-track {
+    gap: 14px;
+    margin-inline: -22px;
+    padding: 8px 22px;
+    scroll-padding-inline: 22px;
+  }
+
+  .review-mini {
+    flex: 0 0 min(82vw, 430px);
+    min-width: 0;
+    padding-inline: 14px;
+  }
+
+  .reviews-feature-stage {
+    min-height: 380px;
+  }
+
+  .review-feature-card {
+    padding: 26px 18px 34px;
+  }
+
+  .reviews-form-card {
+    padding: 22px 18px 18px;
+  }
+
+  .reviews-form input[type="text"],
+  .reviews-form input[type="file"],
+  .reviews-form textarea {
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .reviews-form textarea {
+    min-height: 130px;
+  }
+
+  /* ---------- Контакты и карта ---------- */
+  .location-left {
+    padding: 54px 0;
+  }
+
+  .location-card {
+    padding: 32px 26px 28px;
+  }
+
+  .location-right {
+    height: 360px;
+  }
+
+  /* ---------- Полноэкранная галерея ---------- */
+  .site-gallery-modal {
+    padding: 0;
+  }
+
+  .site-gallery-window {
+    width: 100%;
+    height: 100dvh;
+    border-radius: 0;
+  }
+
+  .site-gallery-menu {
+    display: block;
+    padding: 18px 58px 16px 18px;
+  }
+
+  .site-gallery-menu h3 {
+    font-size: 19px;
+  }
+
+  .site-gallery-menu nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .site-gallery-menu nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-gallery-menu nav button {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+  }
+
+  .site-gallery-content {
+    padding: 16px;
+  }
+
+  .site-gallery-preview img {
+    height: min(48vh, 420px);
+    border-radius: 16px;
+  }
+
+  .site-gallery-thumbs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-gallery-thumbs button {
+    height: 110px;
+    border-radius: 12px;
+  }
+
+  /* ---------- Подвал ---------- */
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-links {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 20px;
+  }
+}
+
+/* =========================================================
+   СМАРТФОНЫ — до 520px
+   Более компактные размеры и элементы на всю ширину.
+========================================================= */
+@media (max-width: 520px) {
+  /* Общие поля и вертикальные отступы секций. */
+  .container {
+    padding-inline: 16px;
+  }
+
+  .section {
+    padding: 48px 0;
+  }
+
+  .header-inner {
+    padding-inline: 14px;
+  }
+
+  .header-inner .logo span {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .menu-toggle {
+    flex: 0 0 44px;
+  }
+
+  /* Соцсети: компактнее на узком телефоне. */
+  .mobile-social {
+    gap: 10px;
+  }
+
+  .mobile-social a {
+    width: 46px;
+    height: 46px;
+  }
+
+  .mobile-social img {
+    width: 38px;
+  }
+
+  /* ---------- Первый экран ---------- */
+  .hero {
+    min-height: 620px;
+    background-position: 66% center;
+  }
+
+  .hero-content {
+    padding-top: 76px;
+  }
+
+  .hero-eyebrow {
+    letter-spacing: 3px;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(33px, 10.5vw, 46px);
+  }
+
+  .hero-divider {
+    margin-block: 18px;
+  }
+
+  .hero-subtitle {
+    font-size: 15px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-buttons a {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  /* ---------- Номера: одна карточка почти на весь экран ---------- */
+  .rooms {
+    padding: 52px 0 48px;
+  }
+
+  .rooms h2 {
+    font-size: clamp(25px, 7.4vw, 32px);
+  }
+
+  .rooms-head .btn-ghost {
+    width: 100%;
+  }
+
+  .rooms-track {
+    margin-inline: -16px;
+    padding-inline: 16px;
+    scroll-padding-inline: 16px;
+  }
+
+  .room-slide {
+    flex-basis: calc(100vw - 48px);
+    padding: 10px 10px 20px;
+    border-radius: 22px;
+  }
+
+  .room-frame img {
+    height: clamp(230px, 72vw, 310px);
+  }
+
+  .room-price {
+    font-size: 16px;
+  }
+
+  .room-meta {
+    line-height: 1.5;
+  }
+
+  /* ---------- Мобильная модалка номера ---------- */
+  .room-modal__top {
+    padding-right: 12px;
+  }
+
+  .room-modal__title {
+    line-height: 1.35;
+  }
+
+  .room-modal__details {
+    padding-inline: 10px;
+  }
+
+  .room-modal__detailsMedia {
+    border-radius: 18px;
+  }
+
+  .room-modal__arrow {
+    font-size: 31px;
+  }
+
+  .room-modal__close {
+    min-width: 96px;
+  }
+
+  /* ---------- About и Activities ---------- */
+  .about-left,
+  .activities-right {
+    padding: 48px 0 40px;
+  }
+
+  .about-line,
+  .activities-line,
+  .location-line {
+    width: 58px;
+    margin-top: 0;
+  }
+
+  .about-title,
+  .activities-title,
+  .location-title {
+    font-size: clamp(25px, 7.2vw, 32px);
+  }
+
+  .about-right,
+  .activities-left {
+    height: 270px;
+  }
+
+  .about-btn,
+  .activities-btn {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  /* ---------- Ресторан ---------- */
+  .dining-showcase {
+    padding: 46px 0;
+  }
+
+  .dining-showcase__inner {
+    padding-inline: 16px;
+  }
+
+  .dining-showcase__resort-logo {
+    height: 82px;
+  }
+
+  .dining-showcase__resort-logo img {
+    max-width: 240px;
+    max-height: 82px;
+  }
+
+  .dining-showcase__photos {
+    /*
+      В restaurant.html находится пять фотоблоков.
+      Все они видны и располагаются вертикально без обрезания.
+    */
+    grid-template-rows: repeat(5, 190px);
+  }
+
+  .dining-showcase__photo--breakfast {
+    display: block;
+  }
+
+  /* ---------- Отзывы ---------- */
+  .reviews-bg {
+    padding: 48px 0;
+  }
+
+  .reviews-h1 {
+    font-size: clamp(30px, 10vw, 42px);
+    letter-spacing: 1px;
+  }
+
+  .reviews-top-track {
+    margin-inline: -16px;
+    padding-inline: 16px;
+    scroll-padding-inline: 16px;
+  }
+
+  .review-mini {
+    flex-basis: calc(100vw - 44px);
+  }
+
+  .reviews-bottom {
+    gap: 32px;
+  }
+
+  .reviews-feature-stage {
+    min-height: 350px;
+    border-radius: 20px;
+  }
+
+  .review-feature-card {
+    inset: 10px 10px 20px;
+  }
+
+  .review-feature-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .reviews-form-card {
+    border-radius: 20px;
+  }
+
+  .rf-submit {
+    min-height: 50px;
+  }
+
+  /* ---------- Контакты ---------- */
+  .location-left {
+    padding: 46px 0;
+  }
+
+  .location-card {
+    padding: 28px 18px 24px;
+    border-radius: 16px;
+  }
+
+  .location-item {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .location-value,
+  .location-link-strong {
+    overflow-wrap: anywhere;
+  }
+
+  .location-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .location-btn {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  .location-secondary {
+    align-self: center;
+    padding-block: 8px;
+  }
+
+  .location-right {
+    height: 300px;
+  }
+
+  /* ---------- Галерея ---------- */
+  .site-gallery-preview img {
+    height: 40vh;
+    min-height: 230px;
+  }
+
+  .site-gallery-thumbs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .site-gallery-thumbs button {
+    height: 90px;
+  }
+
+  /* ---------- Подвал ---------- */
+  .site-footer {
+    padding: 48px 0 24px;
+  }
+
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+
+  .copyright {
+    margin-top: 24px;
+    text-align: left;
+    line-height: 1.5;
+  }
+}
+
+/* Очень узкие экраны: прячем текст логотипа и уменьшаем заголовки. */
+@media (max-width: 360px) {
+  .header-inner .logo span {
+    display: none;
+  }
+
+  .hero-content h1 {
+    font-size: 31px;
+  }
+
+  .rooms h2,
+  .about-title,
+  .activities-title,
+  .location-title {
+    font-size: 24px;
+  }
+}
+
+/* На сенсорных устройствах отключаем hover-прыжок карточки номера. */
+@media (hover: none) {
+  .room-slide:hover {
+    transform: none;
+  }
+
+  .room-slide:hover .room-frame img {
+    transform: none;
+  }
+}
+
+/*
+  Accessibility: если пользователь отключил анимации в системе,
+  сайт не использует плавный скролл и длинные переходы.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
