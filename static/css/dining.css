@@ -1,44 +1,588 @@
-/* Dining — сетка ресторана */
-.dining-grid {
+/* Restaurant section — fixed compact adaptive version */
+.dining-showcase {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(34px, 4vw, 54px) 0;
+  color: #341807;
+  background:
+    radial-gradient(circle at 8% 8%, rgba(126, 153, 104, 0.20), transparent 30%),
+    radial-gradient(circle at 94% 90%, rgba(91, 124, 78, 0.18), transparent 32%),
+    linear-gradient(135deg, #f5f2e9 0%, #e4eadb 48%, #c9d8bd 100%);
+}
+
+.dining-showcase::before {
+  content: "";
+  position: absolute;
+  top: -110px;
+  left: -120px;
+  width: 310px;
+  height: 340px;
+  pointer-events: none;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(72, 48, 24, 0.09), transparent 66%);
+  filter: blur(18px);
+  transform: rotate(-25deg);
+}
+
+.dining-showcase__inner {
+  position: relative;
+  z-index: 1;
+  width: min(96vw, 1500px);
+  max-width: none;
+  margin: 0 auto;
+  padding: 0 18px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
+  grid-template-columns: minmax(360px, 0.82fr) minmax(640px, 1.18fr);
+  gap: clamp(28px, 4vw, 56px);
   align-items: center;
 }
 
-/* Dining — изображение зала/еды */
-.dining-image {
-  min-height: 360px;
-  border-radius: 16px;
-  background: center/cover no-repeat;
-  box-shadow: 0 16px 32px rgba(7, 19, 46, 0.18);
+.dining-showcase__content {
+  text-align: center;
+  max-width: 560px;
+  justify-self: end;
 }
 
-/* Dining — текст описания */
-.dining-text p {
-  line-height: 1.7;
-  color: #5b6b8a;
+.dining-showcase__resort-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 105px;
+  margin: -2px 0 8px;
 }
 
-/* Dining — список особенностей */
-.dining-list {
-  list-style: none;
-  padding: 0;
-  margin: 20px 0 30px;
-  color: #15264b;
+.dining-showcase__resort-logo img {
+  display: block;
+  width: auto;
+  max-width: 310px;
+  max-height: 105px;
+
+  object-fit: contain;
+  opacity: 1;
+
+  filter: brightness(0) saturate(100%)
+    invert(23%) sepia(20%) saturate(1050%)
+    hue-rotate(76deg) brightness(92%) contrast(90%);
 }
 
-/* Dining — элемент списка */
-.dining-list li {
-  padding-left: 18px;
+.dining-showcase__label,
+.dining-showcase__schedule-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #627a57;
+  font-size: clamp(11px, 0.78vw, 14px);
+  font-weight: 700;
+  letter-spacing: clamp(2.5px, 0.32vw, 4px);
+  text-transform: uppercase;
+}
+
+.dining-showcase__label span,
+.dining-showcase__schedule-title span {
+  width: clamp(30px, 4vw, 54px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #91a784, transparent);
+}
+
+.dining-showcase h2 {
+  margin: 16px 0 2px;
+  color: #2f4632;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 2.9vw, 48px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: 0.3px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.dining-showcase__mountains {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 18px;
+  color: rgba(126, 86, 54, 0.50);
+}
+
+.dining-showcase__mountains svg {
+  width: clamp(130px, 13vw, 190px);
+  height: auto;
+  display: block;
+}
+
+.dining-showcase__text {
+  max-width: 500px;
+  margin: 0 auto 20px;
+  color: rgba(46, 29, 18, 0.82);
+  font-size: clamp(14px, 0.92vw, 16px);
+  line-height: 1.55;
+}
+
+.dining-showcase__schedule-title {
+  margin-bottom: 12px;
+}
+
+.dining-showcase__schedule {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.dining-showcase__meal-card {
+  min-height: 104px;
+  padding: 13px 9px 11px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.48);
+  border-color: rgba(99, 127, 84, 0.20);
+  box-shadow: 0 10px 24px rgba(54, 79, 46, 0.10);
+  backdrop-filter: blur(8px);
+}
+
+.dining-showcase__meal-icon,
+.dining-showcase__action-icon,
+.dining-showcase__feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #667e59;
+}
+
+.dining-showcase__meal-icon {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 7px;
+}
+
+.dining-showcase__meal-icon svg,
+.dining-showcase__action-icon svg,
+.dining-showcase__feature-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dining-showcase__meal-card h3 {
+  margin: 0 0 5px;
+  color: #667e59;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dining-showcase__meal-card p {
+  margin: 0;
+  color: #1d1714;
+  font-size: clamp(15px, 1vw, 17px);
+  font-weight: 500;
+}
+
+.dining-showcase__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.dining-showcase__download,
+.dining-showcase__gallery-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: clamp(12px, 0.84vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.dining-showcase__download {
+  gap: 12px;
+  color: #fff;
+  text-align: left;
+  border: 0;
+  background: linear-gradient(135deg, #36533b 0%, #58734e 100%);
+  box-shadow: 0 14px 28px rgba(47, 76, 51, 0.22);
+}
+
+.dining-showcase__download .dining-showcase__action-icon {
+  color: #fff;
+}
+
+.dining-showcase__download small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  opacity: 0.86;
+}
+
+.dining-showcase__gallery-btn {
+  gap: 10px;
+  color: #36533b;
+  border-color: rgba(54, 83, 59, 0.58);
+  background: rgba(255, 255, 255, 0.40);
+}
+
+.dining-showcase__download:hover,
+.dining-showcase__gallery-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(88, 35, 8, 0.16);
+}
+
+.dining-showcase__action-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+}
+
+.dining-showcase__features {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  color: #241712;
+}
+
+.dining-showcase__features div {
+  min-height: 58px;
+  padding: 0 9px;
+  border-right: 1px solid rgba(126, 86, 54, 0.16);
+}
+
+.dining-showcase__features div:last-child {
+  border-right: 0;
+}
+
+.dining-showcase__feature-icon {
+  width: 27px;
+  height: 27px;
+  margin-bottom: 5px;
+}
+
+.dining-showcase__features p {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.dining-showcase__photos {
+  justify-self: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.88fr);
+  grid-template-rows: minmax(0, 230px) minmax(0, 230px) minmax(0, 240px);
+  gap: 14px;
+}
+
+.dining-showcase__photo {
   position: relative;
-  margin-bottom: 10px;
+  overflow: hidden;
+  margin: 0;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  background: #d9c8b6;
+  box-shadow: 0 14px 30px rgba(47, 24, 9, 0.14);
 }
 
-/* Dining — маркер списка */
-.dining-list li::before {
-  content: "•";
+.dining-showcase__photo::after {
+  content: "";
   position: absolute;
-  left: 0;
-  color: #1c3c92;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 64%, rgba(36, 20, 10, 0.14) 100%);
+  opacity: 0.72;
+}
+
+.dining-showcase__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s ease;
+}
+
+.dining-showcase__photo:hover img {
+  transform: scale(1.04);
+}
+
+.dining-showcase__photo--main {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.dining-showcase__photo--food {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.dining-showcase__photo--buffet {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.dining-showcase__photo--breakfast {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.dining-showcase__photo--hall {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+@media (max-width: 1440px) {
+  .dining-showcase__inner {
+    width: min(98vw, 1380px);
+    grid-template-columns: minmax(340px, 0.78fr) minmax(560px, 1.22fr);
+    gap: 36px;
+  }
+
+  .dining-showcase__content {
+    max-width: 510px;
+  }
+
+  .dining-showcase h2 {
+    font-size: clamp(32px, 3vw, 50px);
+  }
+
+  .dining-showcase__photos {
+    grid-template-rows: 205px 205px 210px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .dining-showcase__inner {
+    grid-template-columns: 1fr;
+    width: min(94vw, 900px);
+  }
+
+  .dining-showcase__content {
+    max-width: 700px;
+    justify-self: center;
+  }
+
+  .dining-showcase h2 br {
+    display: none;
+  }
+
+  .dining-showcase__photos {
+    grid-template-rows: 220px 220px 220px;
+  }
+}
+
+@media (max-width: 760px) {
+  .dining-showcase {
+    padding: 42px 0 50px;
+  }
+
+  .dining-showcase__inner {
+    width: min(94vw, 640px);
+    gap: 28px;
+    padding: 0;
+  }
+
+  .dining-showcase h2 {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+
+  .dining-showcase__text {
+    max-width: 94%;
+  }
+
+  .dining-showcase__schedule {
+    grid-template-columns: 1fr;
+  }
+
+  .dining-showcase__meal-card {
+    min-height: auto;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-template-areas:
+      "icon title"
+      "icon time";
+    align-items: center;
+    text-align: left;
+    column-gap: 12px;
+    padding: 13px 15px;
+  }
+
+  .dining-showcase__meal-icon {
+    grid-area: icon;
+    margin: 0;
+  }
+
+  .dining-showcase__meal-card h3 {
+    grid-area: title;
+  }
+
+  .dining-showcase__meal-card p {
+    grid-area: time;
+  }
+
+  .dining-showcase__actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dining-showcase__features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 0;
+  }
+
+  .dining-showcase__features div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .dining-showcase__photos {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 235px 160px 185px;
+  }
+
+  .dining-showcase__photo--main {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+  }
+
+  .dining-showcase__photo--food {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .dining-showcase__photo--buffet {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .dining-showcase__photo--breakfast {
+    display: none;
+  }
+
+  .dining-showcase__photo--hall {
+    grid-column: 1 / span 2;
+    grid-row: 3;
+  }
+}
+
+@media (max-width: 520px) {
+  .dining-showcase__label,
+  .dining-showcase__schedule-title {
+    gap: 8px;
+  }
+
+  .dining-showcase__features {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .dining-showcase__features div {
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(126, 86, 54, 0.16);
+  }
+
+  .dining-showcase__features div:last-child {
+    border-bottom: 0;
+  }
+
+  .dining-showcase__feature-icon {
+    margin-bottom: 0;
+  }
+
+  .dining-showcase__photos {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 210px);
+  }
+
+  .dining-showcase__photo--main,
+  .dining-showcase__photo--food,
+  .dining-showcase__photo--buffet,
+  .dining-showcase__photo--hall {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+/* =========================
+   PHOTO SLIDERS — RESTAURANT
+========================= */
+
+.dining-photo-slider__track {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Все фото лежат друг над другом */
+.dining-photo-slider__track img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  opacity: 0;
+  transform: scale(1.06);
+
+  transition:
+    opacity 0.85s ease-in-out,
+    transform 1.15s ease-out;
+
+  will-change: opacity, transform;
+}
+
+/* Активное фото мягко проявляется */
+.dining-photo-slider__track img.is-active {
+  z-index: 2;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Стрелки полностью скрыты */
+.dining-photo-slider__arrow {
+  display: none !important;
+}
+
+/* Точки снизу */
+.dining-photo-slider__dots {
+  position: absolute;
+  z-index: 4;
+  bottom: 9px;
+  left: 50%;
+
+  display: flex;
+  gap: 5px;
+
+  transform: translateX(-50%);
+}
+
+.dining-photo-slider__dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.52);
+
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.dining-photo-slider__dot.is-active {
+  background: #fff;
+  transform: scale(1.28);
 }

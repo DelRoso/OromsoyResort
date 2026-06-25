@@ -1,0 +1,39 @@
+{% load static %}
+<div class="site-gallery-modal" data-site-gallery aria-hidden="true">
+  <div class="site-gallery-backdrop" data-site-gallery-close></div>
+  <div class="site-gallery-window" role="dialog" aria-modal="true" aria-labelledby="site-gallery-title">
+    <aside class="site-gallery-menu" aria-label="Разделы общей галереи">
+      <button class="site-gallery-close" type="button" data-site-gallery-close aria-label="Закрыть галерею">×</button>
+      <span class="dining-kicker">Галерея</span>
+      <h3 id="site-gallery-title">Галерея Oromsoy</h3>
+      <nav>
+        <button class="is-active" type="button" data-site-gallery-section="all">Все</button>
+        <button type="button" data-site-gallery-section="restaurant">Ресторан</button>
+        <button type="button" data-site-gallery-section="rooms">Номера</button>
+        <button type="button" data-site-gallery-section="territory">Территория</button>
+      </nav>
+    </aside>
+
+    <div class="site-gallery-content">
+      <figure class="site-gallery-preview">
+        <img src="{% static 'images/background/test1.jpg' %}" alt="Галерея Oromsoy Resort" data-site-gallery-preview>
+        <figcaption data-site-gallery-caption>Уютный зал ресторана Oromsoy Resort</figcaption>
+      </figure>
+
+      <div class="site-gallery-thumbs">
+        <button class="is-active" type="button" data-site-gallery-thumb data-site-gallery-category="restaurant" data-site-gallery-src="{% static 'images/background/test1.jpg' %}" data-site-gallery-caption="Уютный зал ресторана Oromsoy Resort">
+          <img src="{% static 'images/background/test1.jpg' %}" alt="Уютный зал ресторана">
+        </button>
+        <button type="button" data-site-gallery-thumb data-site-gallery-category="restaurant" data-site-gallery-src="{% static 'images/background/test1.jpg' %}" data-site-gallery-caption="Горячие блюда и домашняя подача">
+          <img src="{% static 'images/background/test1.jpg' %}" alt="Блюда ресторана">
+        </button>
+        <button type="button" data-site-gallery-thumb data-site-gallery-category="restaurant" data-site-gallery-src="{% static 'images/background/test1.jpg' %}" data-site-gallery-caption="Детали сервировки и атмосфера отдыха">
+          <img src="{% static 'images/background/test1.jpg' %}" alt="Детали сервировки">
+        </button>
+        <button type="button" data-site-gallery-thumb data-site-gallery-category="restaurant" data-site-gallery-src="{% static 'images/background/test1.jpg' %}" data-site-gallery-caption="Пространство для завтраков, обедов и ужинов">
+          <img src="{% static 'images/background/test1.jpg' %}" alt="Пространство ресторана">
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
